@@ -1,0 +1,13 @@
+var m = 0 ;
+var n = 3 ;
+var a = 1 ;
+var c = 10 ;
+var z = 7 ;
+var q = 21 ;
+var s = 5 ;
+var t = .1 ;
+var e = 3.514 ;
+var g = 9.14 ;
+var o = 0.01 ;
+var d = -1 ;
+e ^ t ;

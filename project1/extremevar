@@ -1,0 +1,5 @@
+var a = 71 ;
+var c = -1.8 ;
+var x = 675 ;
+var y = .009 ;
+a ^ c - x / y + ( a - c ) ^ ( x * y ) ;
