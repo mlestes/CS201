@@ -4,6 +4,7 @@ unary : NUMBER
       | MINUS VARIABLE
       | OPEN_PAR expression CLOSE_PAR
 expression : unary operator unary
+           | STRING
            | EMPTY
 operator : PLUS
          | TIMES
@@ -31,3 +32,4 @@ parameterlist : parameter
               | EMPTY
 parameter : VARIABLE
 funccall : FUNCTION OPEN_PAR parameterlist CLOSE_PAR
+comment : OPEN_ANGLE STRING CLOSE_ANGLE
