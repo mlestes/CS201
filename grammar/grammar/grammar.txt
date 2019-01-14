@@ -47,8 +47,6 @@ comment : OPEN_ANGLE STRING CLOSE_ANGLE
 structdef : STRUCTURE VARIABLE structblock SEMI_COLON
           | STRUCTURE STRING SEMI_COLON
 structblock : BEGIN expressionlist END
-expressionlist : expression SEMI_COLON
-               | expression SEMI_COLON expressionlist
 structcall : STRUCT DOT ATTRIBUTE
 program : funcdef
         | funcdef program
