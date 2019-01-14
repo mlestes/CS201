@@ -4,9 +4,12 @@ unary : NUMBER
       | MINUS VARIABLE
       | OPEN_PAR expression CLOSE_PAR
 expression : unary operator unary
+           : unary comparator unary
            | vardef
            | STRING
            | EMPTY
+expressionlist : expression SEMI_COLON
+               | expression SEMI_COLON expressionlist
 operator : PLUS
          | TIMES
          | MINUS
@@ -14,11 +17,12 @@ operator : PLUS
          | MOD
          | POW
          | EQUALS
-         | GREATER_THAN
-         | LESS_THAN
-         | NOT operator
-         | GREATER_THAN EQUALS
-         | LESS_THAN EQUALS
+comparator : EQUALS
+           | GREATER_THAN
+           | LESS_THAN
+           | NOT operator
+           | GREATER_THAN EQUALS
+           | LESS_THAN EQUALS
 if : IF OPEN_PAR expression CLOSE_PAR block else
 else : ELSE block
      | EMPTY
@@ -40,6 +44,13 @@ parameterlist : parameter
 parameter : VARIABLE
 funccall : FUNCTION OPEN_PAR parameterlist CLOSE_PAR
 comment : OPEN_ANGLE STRING CLOSE_ANGLE
+structdef : STRUCTURE VARIABLE structblock SEMI_COLON
+          | STRUCTURE STRING SEMI_COLON
+structblock : BEGIN expressionlist END
+expressionlist : expression SEMI_COLON
+               | expression SEMI_COLON expressionlist
+structcall : STRUCT DOT ATTRIBUTE
 program : funcdef
         | funcdef program
         | expression program
+        | structdef program
