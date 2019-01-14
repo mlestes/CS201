@@ -22,3 +22,11 @@ multi-line comment>
        x = x + 1;
     END
 END
+
+TestFun()
+BEGIN
+    var a = 1;
+    var b = 2;
+    var c = 3 mod b - a;
+    FuncDef(a b c);
+END
