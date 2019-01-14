@@ -1,0 +1,24 @@
+<This is a comment>
+FuncDef(var1 var2 var3)
+BEGIN
+    var x = 1;
+    var y = -1;
+    var z;
+    var a;
+    z = x * y; <This evaluates to -1>
+    if(z > 0)
+    BEGIN
+        a = "This is false";
+        else
+        BEGIN
+            a = "This is the string";
+        END
+    END
+<This is a
+multi-line comment>
+    while(x < 10)
+    BEGIN
+       z = var1 + var2 * var3;
+       x = x + 1;
+    END
+END
