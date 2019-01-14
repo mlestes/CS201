@@ -3,8 +3,9 @@ unary : NUMBER
       | VARIABLE
       | MINUS VARIABLE
       | OPEN_PAR expression CLOSE_PAR
-      | STRING
 expression : unary operator unary
+           | vardef
+           | STRING
            | EMPTY
 operator : PLUS
          | TIMES
@@ -27,10 +28,11 @@ statementlist : statement
               | statement statementlist
               | EMPTY
 statement : expression SEMI_COLON
+          | funccall SEMI_COLON
           | if
           | while
-vardef : VAR VARIABLE ASSIGN expression SEMI_COLON
-       | VAR VARIABLE SEMI_COLON
+vardef : VAR VARIABLE ASSIGN expression
+       | VAR VARIABLE
 funcdef : FUNCTION VARIABLE OPEN_PAR parameterlist CLOSE_PAR block
 parameterlist : parameter
               | parameter parameterlist
@@ -38,3 +40,6 @@ parameterlist : parameter
 parameter : VARIABLE
 funccall : FUNCTION OPEN_PAR parameterlist CLOSE_PAR
 comment : OPEN_ANGLE STRING CLOSE_ANGLE
+program : funcdef
+        | funcdef program
+        | expression program
