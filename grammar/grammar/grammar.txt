@@ -1,15 +1,18 @@
-unary : NUMBER
-      | MINUS NUMBER
+unary : INTEGER
+      | REAL
       | VARIABLE
-      | MINUS VARIABLE
       | OPEN_PAR expression CLOSE_PAR
-expression : unary operator unary
-           : unary comparator unary
-           | vardef
-           | STRING
-           | EMPTY
-expressionlist : expression SEMI_COLON
-               | expression SEMI_COLON expressionlist
+      | STRING
+      | operator unary
+      | VARIABLE OPEN_PAR expressionlist CLOSE_PAR
+
+expression : unary
+           | unary operator expression
+
+expressionlist : expression
+               | expression expressionlist
+               | EMPTY
+
 operator : PLUS
          | TIMES
          | MINUS
@@ -17,38 +20,58 @@ operator : PLUS
          | MOD
          | POW
          | EQUALS
-comparator : EQUALS
-           | GREATER_THAN
-           | LESS_THAN
-           | NOT operator
-           | GREATER_THAN EQUALS
-           | LESS_THAN EQUALS
-if : IF OPEN_PAR expression CLOSE_PAR block else
-else : ELSE block
-     | EMPTY
-while : WHILE OPEN_PAR expression CLOSE_PAR block
+         | PLUS PLUS
+         | MINUS MINUS
+         | PLUS EQUALS
+         | MINUS EQUALS
+         | TIMES EQUALS
+         | DIVIDE EQUALS
+         | EQUALS EQUALS
+         | GREATER_THAN
+         | LESS_THAN
+         | NOT operator
+         | GREATER_THAN EQUALS
+         | LESS_THAN EQUALS
+         | DOT
+         | AND
+         | OR
+         | XOR
+
+ifstate : IF OPEN_PAR expression CLOSE_PAR block elsestate
+
+elsestate : ELSE block
+          | EMPTY
+
+whilestate : WHILE OPEN_PAR expression CLOSE_PAR block
+
 block : BEGIN statementlist END
+      | EMPTY
+
 statementlist : statement
               | statement statementlist
               | EMPTY
+
 statement : expression SEMI_COLON
-          | funccall SEMI_COLON
-          | if
-          | while
+          | vardef SEMI_COLON
+          | ifstate
+          | whilestate
+
 vardef : VAR VARIABLE ASSIGN expression
        | VAR VARIABLE
+
 funcdef : FUNCTION VARIABLE OPEN_PAR parameterlist CLOSE_PAR block
-parameterlist : parameter
-              | parameter parameterlist
+        | FUNCTION VARIABLE SEMI_COLON
+
+parameterlist : VARIABLE
+              | VARIABLE parameterlist
               | EMPTY
-parameter : VARIABLE
-funccall : FUNCTION OPEN_PAR parameterlist CLOSE_PAR
-comment : OPEN_ANGLE STRING CLOSE_ANGLE
-structdef : STRUCTURE VARIABLE structblock SEMI_COLON
-          | STRUCTURE STRING SEMI_COLON
-structblock : BEGIN expressionlist END
-structcall : STRUCTURE DOT ATTRIBUTE
+
+structdef : STRUCT VARIABLE block
+          | STRUCT VARIABLE SEMI_COLON
+
 program : funcdef
+        | structdef
+        | expression
         | funcdef program
         | expression program
         | structdef program

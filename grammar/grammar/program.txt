@@ -1,25 +1,40 @@
-<This is a comment>
+
+i = 30; <This is a global>
+
+struct test
+BEGIN
+     var attr1;
+     var attr2;
+     if(i < 30)
+     BEGIN
+         var attr3;
+     END
+     else
+     BEGIN
+         var attr4;
+     END
+END
+
 FuncDef(var1 var2 var3)
 BEGIN
+    testStruct = newStruct(var1 var2 var3);
     var x = 1;
     var y = -1;
     var z;
     var a;
-    z = x * y; <This evaluates to -1>
-    if(z > 0)
+    z = x * y;
+    if(z >= testStruct.attr2)
     BEGIN
         a = "This is false";
-        else
-        BEGIN
-            a = "This is the string";
-        END
     END
-<This is a
-multi-line comment>
+    else
+    BEGIN
+        a = "This is the string";
+    END
     while(x < 10)
     BEGIN
        z = var1 + var2 * var3;
-       x = x + 1;
+       x++;
     END
 END
 
@@ -27,6 +42,10 @@ TestFun()
 BEGIN
     var a = 1;
     var b = 2;
-    var c = 3 mod b - a;
+    var c = 3 % b - a;
     FuncDef(a b c);
+    if(c == 0 AND i != 15)
+    BEGIN
+        FuncDef(c b a);
+    END
 END
