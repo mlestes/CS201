@@ -1,5 +1,5 @@
 
-i = 30; <This is a global>
+i = 30;
 
 struct test
 BEGIN
