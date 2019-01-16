@@ -4,7 +4,13 @@ unary : INTEGER
       | OPEN_PAR expression CLOSE_PAR
       | STRING
       | operator unary
+      | unary operator
       | VARIABLE OPEN_PAR expressionlist CLOSE_PAR
+      | RETURN expression
+      | BREAK
+      | CONTINUE
+
+ternary : expression QUESTION expression COLON expression
 
 expression : unary
            | unary operator expression
@@ -22,13 +28,10 @@ operator : PLUS
          | EQUALS
          | PLUS PLUS
          | MINUS MINUS
-         | PLUS EQUALS
-         | MINUS EQUALS
-         | TIMES EQUALS
-         | DIVIDE EQUALS
-         | EQUALS EQUALS
+         | operator EQUALS
          | GREATER_THAN
          | LESS_THAN
+         | NOT
          | NOT operator
          | GREATER_THAN EQUALS
          | LESS_THAN EQUALS
@@ -67,7 +70,6 @@ parameterlist : VARIABLE
               | EMPTY
 
 structdef : STRUCT VARIABLE block
-          | STRUCT VARIABLE SEMI_COLON
 
 program : funcdef
         | structdef
