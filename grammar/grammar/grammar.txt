@@ -13,6 +13,7 @@ unary : INTEGER
 ternary : expression QUESTION expression COLON expression
 
 expression : unary
+           | ternary
            | unary operator expression
 
 expressionlist : expression
