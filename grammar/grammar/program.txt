@@ -23,19 +23,17 @@ BEGIN
     var z;
     var a;
     z = x * y;
-    if(z >= testStruct.attr2)
-    BEGIN
-        a = "This is false";
-    END
-    else
-    BEGIN
-        a = "This is the string";
-    END
+    a = z >= testStruct.attr2 ? "This is false" : "This is the string";
     while(x < 10)
     BEGIN
-       z = var1 + var2 * var3;
+       z = var1 + var2 * (var3 * x);
        x++;
+       if(var3 * x > 20)
+       BEGIN
+           break;
+       END
     END
+    return a;
 END
 
 TestFun()
@@ -46,6 +44,6 @@ BEGIN
     FuncDef(a b c);
     if(c == 0 AND i != 15)
     BEGIN
-        FuncDef(c b a);
+        print(FuncDef(c b a));
     END
 END
