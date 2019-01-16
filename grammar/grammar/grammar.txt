@@ -1,11 +1,11 @@
 unary : INTEGER
       | REAL
       | VARIABLE
-      | OPEN_PAR expression CLOSE_PAR
+      | OPEN_PAREN expression CLOSE_PAREN
       | STRING
       | operator unary
       | unary operator
-      | VARIABLE OPEN_PAR expressionlist CLOSE_PAR
+      | VARIABLE OPEN_PAREN expressionlist CLOSE_PAREN
       | RETURN expression
       | BREAK
       | CONTINUE
@@ -41,12 +41,12 @@ operator : PLUS
          | OR
          | XOR
 
-ifstate : IF OPEN_PAR expression CLOSE_PAR block elsestate
+ifstate : IF OPEN_PAREN expression CLOSE_PAREN block elsestate
 
 elsestate : ELSE block
           | EMPTY
 
-whilestate : WHILE OPEN_PAR expression CLOSE_PAR block
+whilestate : WHILE OPEN_PAREN expression CLOSE_PAREN block
 
 block : BEGIN statementlist END
       | EMPTY
@@ -63,7 +63,7 @@ statement : expression SEMI_COLON
 vardef : VAR VARIABLE ASSIGN expression
        | VAR VARIABLE
 
-funcdef : FUNCTION VARIABLE OPEN_PAR parameterlist CLOSE_PAR block
+funcdef : FUNCTION VARIABLE OPEN_PAREN parameterlist CLOSE_PAREN block
         | FUNCTION VARIABLE SEMI_COLON
 
 parameterlist : VARIABLE
