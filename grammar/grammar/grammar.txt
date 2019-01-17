@@ -1,24 +1,31 @@
 unary : INTEGER
       | REAL
       | VARIABLE
+      | VARIABLE OPEN_PAREN expressionlist CLOSE_PAREN
+      | prefix unary
+      | unary suffix
       | OPEN_PAREN expression CLOSE_PAREN
       | STRING
-      | operator unary
-      | unary operator
-      | VARIABLE OPEN_PAREN expressionlist CLOSE_PAREN
       | RETURN expression
       | BREAK
       | CONTINUE
+      | PRINT OPEN_PAREN printstatement CLOSE_PAREN
 
 ternary : expression QUESTION expression COLON expression
 
 expression : unary
-           | ternary
            | unary operator expression
+           | unary comparator expression
+           | unary logic expression
 
 expressionlist : expression
                | expression expressionlist
                | EMPTY
+
+printstatement : STRING
+               | VARIABLE
+               | STRING printstatement
+               | VARIABLE printstatement
 
 operator : PLUS
          | TIMES
@@ -26,20 +33,29 @@ operator : PLUS
          | DIVIDE
          | MOD
          | POW
-         | EQUALS
-         | PLUS PLUS
-         | MINUS MINUS
-         | operator EQUALS
-         | GREATER_THAN
-         | LESS_THAN
-         | NOT
-         | NOT operator
-         | GREATER_THAN EQUALS
-         | LESS_THAN EQUALS
+         | ASSIGN
          | DOT
-         | AND
-         | OR
-         | XOR
+
+comparator: EQUALS_EQUALS
+          | GREATER_THAN
+          | LESS_THAN
+          | GREATER_THAN_EQUALS
+          | LESS_THAN_EQUALS
+          | NOT comparator
+
+logic : AND
+      | OR
+      | XOR
+
+prefix : PLUS
+       | MINUS
+       | PLUS_PLUS
+       | MINUS_MINUS
+       | AND
+       | STAR
+
+suffix : PLUS_PLUS
+       | MINUS_MINUS
 
 ifstate : IF OPEN_PAREN expression CLOSE_PAREN block elsestate
 
@@ -56,15 +72,17 @@ statementlist : statement
               | EMPTY
 
 statement : expression SEMI_COLON
+          | ternary SEMI_COLON
           | vardef SEMI_COLON
+          | funcdef 
           | ifstate
           | whilestate
 
 vardef : VAR VARIABLE ASSIGN expression
        | VAR VARIABLE
 
-funcdef : FUNCTION VARIABLE OPEN_PAREN parameterlist CLOSE_PAREN block
-        | FUNCTION VARIABLE SEMI_COLON
+funcdef : DEFINE VARIABLE OPEN_PAREN parameterlist CLOSE_PAREN block
+        | DEFINE VARIABLE SEMI_COLON
 
 parameterlist : VARIABLE
               | VARIABLE parameterlist
