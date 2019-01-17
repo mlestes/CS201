@@ -1,49 +1,54 @@
 
-i = 30;
+VAR i = 30;
 
-struct test
+STRUCT test
 BEGIN
-     var attr1;
-     var attr2;
-     if(i < 30)
+     VAR attr1;
+     VAR attr2;
+     IF(i < 30)
      BEGIN
-         var attr3;
+         VAR attr3;
      END
-     else
+     ELSE
      BEGIN
-         var attr4;
+         VAR attr4;
      END
 END
 
-FuncDef(var1 var2 var3)
+DEFINE FuncDef(var1 var2 var3)
 BEGIN
     testStruct = newStruct(var1 var2 var3);
-    var x = 1;
-    var y = -1;
-    var z;
-    var a;
+    VAR x = 1;
+    VAR y = -1;
+    VAR z;
+    VAR a;
+    DEFINE nestFun(h l j k)
+    BEGIN
+        RETURN ((h ^ l) % j) / k;
+    END
     z = x * y;
-    a = z >= testStruct.attr2 ? "This is false" : "This is the string";
-    while(x < 10)
+    a == z >= testStruct.attr2 ? "This is false" : "This is the string";
+    WHILE(x < 10)
     BEGIN
        z = var1 + var2 * (var3 * x);
        x++;
-       if(var3 * x > 20)
+       IF(var3 * x > 20)
        BEGIN
-           break;
+           BREAK;
        END
     END
-    return a;
+    RETURN a;
 END
 
-TestFun()
+DEFINE TestFun()
 BEGIN
-    var a = 1;
-    var b = 2;
-    var c = 3 % b - a;
+    VAR a = 1;
+    VAR b = 2;
+    VAR c = 3 % b - a;
     FuncDef(a b c);
-    if(c == 0 AND i != 15)
+    IF(c == 0 AND i !== 15)
     BEGIN
-        print(FuncDef(c b a));
+        PRINT(FuncDef(c b a));
     END
+    PRINT("i is now equal to " i " and c is " c);
 END
