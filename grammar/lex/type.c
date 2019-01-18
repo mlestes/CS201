@@ -5,13 +5,13 @@
 // Date Completed:
 /*****************************************************************************/
 // Usage:
-// type *newType(void *) - creates a new type object.
-// 	type *t = newType(32);
+// type_t *newType(void *) - creates a new type object.
+// 	type_t *t = newType(32);
 //
-// void *getTypeValue(type *) - returns the stored type object's value.
+// void *getTypeValue(type_t *) - returns the stored type object's value.
 // 	int *x = (int *) getTypeValue(t);
 //
-// char *getTypeCast(type *) - returns the type of the stored object.
+// char *getTypeCast(type_t *) - returns the type of the stored object.
 // 	char *objType = getTypeCast(t);
 //
 /*****************************************************************************/
@@ -20,14 +20,21 @@
 #include <stdio.h>
 #include <string.h>
 #include "type.h"
+#include "int.h"
+#include "real.h"
+#include "str.h"
+
+#define INT 0
+#define DBL 1
+#define STR 2
 
 /*** STRUCTRES ***/
-struct Type{
+struct Type_type{
     
     char *cast;
-    int ival;
-    double rval;
-    char *sval;
+    integer *ival;
+    real *rval;
+    string *sval;
 
 };
 
@@ -35,24 +42,27 @@ struct Type{
 int parseToken(void *);
 
 /*** PUBLIC/MAIN FUNCTION DEFINITIONS ***/
-type *newType(void *item){
+type_t *newType(void *item){
 
     int parsed = parseToken(item);
-    type *t = malloc(sizeof(type));
+    type_t *t = malloc(sizeof(type_t));
     switch (parsed){
-        case 0:
+        case INT:
             t->cast = INTEGER;
-	    int *i = (int *) item;
-	    t->ival = *i;
+	    char *str = (char *) item;
+	    int i = atoi(str);
+	    t->ival = newInteger(i);
 	    break;
-	case 1:
+	case DBL:
 	    t->cast = REAL;
-	    doulbe *r = (double *) item;
-	    t->rval = *r;
+	    char *str = (char *) item;
+	    double r = atof(str);
+	    t->rval = newReal(r);
 	    break;
-	case 2:
+	case STR:
 	    t->cast = STRING;
-	    t->sval = (char *) item;
+	    char *str = (char *) item;
+	    t->sval = newString(str);
 	    break;
     }
 
@@ -60,16 +70,14 @@ type *newType(void *item){
 
 }
 
-void *getTypeValue(type *t){
+void *getTypeValue(type_t *t){
 
     switch (t->cast){
-        case INTEGER:
-            int *i = t->ival;
-	    return i;
+        case INTEGER:   
+	    return t->ival;
 	    break;
 	case REAL:
-	    double *r = t->rval;
-	    return r;
+	    return t->rval;
 	    break;
 	case STRING:
 	    return t->sval;
@@ -78,7 +86,7 @@ void *getTypeValue(type *t){
 
 }
 
-char *getTypeCast(type *t){return t->cast;}
+char *getTypeCast(type_t *t){return t->cast;}
 
 /*** PRIVATE FUNCTION DEFINITIONS ***/
 //parse token by char to determine type
@@ -98,21 +106,26 @@ int parseToken(void *item){
 	    break;
 	}
 	else if(!isdigit(token[i])){
-            if(token[i] != '.' || (token[0] != '-' && !issdigit(token[0]))){
+            if(token[i] != '.' && dot == 0){ 
 		isreal = 0;
 		isint = 0;
 		break;
 	    }
-	    else dot = 1;
+	    else if(i == 0 && token[i] != '-'){
+                isreal = 0;
+	        isint = 0;
+		break;
+            }
+            else if(token[i] == '.') dot = 1;
 	}
     }
     if(isint) isstring = 0;
     else if(dot) isint = 0;
     else isreal = 0;
 
-    if(isint) return 0;
-    else if(isreal) return 1;
-    else return 2;
+    if(isint) return INT;
+    else if(isreal) return DBL;
+    else return STR;
 
 }
 

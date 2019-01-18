@@ -38,8 +38,10 @@
 #define STAR "STAR"
 #define ERROR "ERROR"
 
-typedef struct lexeme;
+typedef struct Lexeme_Type lexeme_t;
 
-extern struct lexeme newLexeme(char *);
+extern lexeme_t *newLexeme(char *);
+extern char *getLexemeType(lexeme_t *);
+extern type_t *getLexemeValue(lexeme_t *);
 
 #endif
