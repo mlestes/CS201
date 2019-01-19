@@ -27,6 +27,7 @@ struct Lexeme_Type{
 
 	char *type;
 	type_t *value;
+	char *error:
 
 };
 
@@ -39,6 +40,7 @@ lexeme_t *newLexeme(char *item){
 	lexeme_t *l = malloc(sizeof(lexeme_t));
 	l->value = newType(item);
 	l->type = parse(item);
+	l->error = 0;
 
 	return l;
 
@@ -46,6 +48,9 @@ lexeme_t *newLexeme(char *item){
 
 char *getLexemeType(lexeme_t *l){return l->type;}
 type_t *getLexemeValue(lexeme_t *l){return l->value;}
+void setLexemeType(char *type, lexeme_t *l){l->type = type;}
+void setLexemeValue(char *val, lexeme_t *l){l->value = newType(val);}
+void setLexemeError(char *err, lexeme_t *l){l->error = err;}
 
 /*** PRIVATE FUNCTION DEFINITIONS ***/
 char *parse(char *str){
@@ -91,6 +96,7 @@ char *parse(char *str){
 	    break;
 	case 4:
 	    if(strcmp(str, "ELSE") == 0) return ELSE;
+	    else if(strcmp(str, "STAR") == 0) return STAR;
 	    else return STRING;
 	    break;
 	case 5:

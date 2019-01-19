@@ -37,11 +37,24 @@
 #define VARIABLE "VARIABLE"
 #define STAR "STAR"
 #define ERROR "ERROR"
+#define IF "IF"
+#define ELSE "ELSE"
+#define END "END"
+#define BEGIN "BEGIN"
+#define RETURN "RETURN"
+#define BREAK "BREAK"
+#define CONTINUE "CONTINUE"
+#define STRUCT "STRUCT"
+#define VAR "VAR"
+#define DEFINE "DEFINE"
 
 typedef struct Lexeme_Type lexeme_t;
 
 extern lexeme_t *newLexeme(char *);
 extern char *getLexemeType(lexeme_t *);
 extern type_t *getLexemeValue(lexeme_t *);
+extern void setLexemeType(char *, lexeme_t *);
+extern void setLexemeValue(char *, lexeme_t *);
+extern void setLexemeError(char *, lexeme_t *);
 
 #endif
