@@ -27,7 +27,6 @@ lexeme_t *lexString(FILE *);
 lexeme_t *lexNum(FILE *);
 lexeme_t *lexWord(FILE *);
 lexeme_t *lexError(FILE *, char *);
-int isoperator(char);
 lexeme_t *parseError(char *, FILE *, char *);
 char *grow(char *, int *);
 
@@ -199,8 +198,7 @@ lexeme_t *lexNum(FILE *fp){
             }
             else return parseError(str, fp, ERR_0);
         }
-        else if(isalpha(c)) return parseError(str, fp, ERR_0);
-	else if(isoperator(c)) return parseError(str, fp, ERR_0);
+	else if(!isdigit(c)) return parseError(str, fp, ERR_0);
         else str[i++] = c;
         if(i >= size) str = grow(str, &size);
 	c = fgetc(fp);
