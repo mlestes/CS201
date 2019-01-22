@@ -29,3 +29,22 @@ clean:
 	rm -f *.o scanner
 
 test1:
+	@echo "Test 1: program.txt"
+	@./scanner program.txt
+
+test2:
+	@echo "Test 2: file2"
+	@./scanner file2
+
+test3:
+	@echo "Test 3: file3"
+	@./scanner file3
+
+test4:
+	@echo "Test 4: file4"
+	@./scanner file4
+
+test5:
+	@echo "Test 5: badfile"
+	@./scanner badfile
+run: test1 test2 test3 test4 test5
