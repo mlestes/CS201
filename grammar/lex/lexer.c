@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <ctype.h>
 #include "lexer.h"
 #include "lexeme.h"
@@ -33,9 +34,14 @@ char *grow(char *, int *);
 /*** MAIN/PUBLIC FUNCTION DEFINITIONS ***/
 lexeme_t *lex(FILE *fp){
 
-    char c;
     skipwhitespace(fp);
+    char c;
     c = fgetc(fp);
+    if(c == EOF){
+        lexeme_t *l = newLexeme("END_OF_FILE");
+        setLexemeType(END_READ, l);
+        return l;
+    }
     switch(c){
         case '(': return newLexeme("(");
         case ')': return newLexeme(")");
@@ -44,17 +50,23 @@ lexeme_t *lex(FILE *fp){
         case '.': return newLexeme(".");
         case '+':
             c = fgetc(fp);
-            if(c == '+') return newLexeme("++");
+            if(c == '+'){
+                //ungetc(c, fp);
+                return newLexeme("++");
+            }
             else{
                 ungetc(c, fp);
                 return newLexeme("+");
             }
         case '-':
             c = fgetc(fp);
-            if(c == '-') return newLexeme("--");
+            if(c == '-'){
+                //ungetc(c, fp);
+                return newLexeme("--");
+            }
             else{
                 ungetc(c, fp);
-            return newLexeme("-");
+                return newLexeme("-");
             }
         case '*':
             c = fgetc(fp);
@@ -92,6 +104,7 @@ lexeme_t *lex(FILE *fp){
                 ungetc(c, fp);
                 return newLexeme("=");
             }
+        case '?': return newLexeme("?");
         default:
             if(isdigit(c)){
                 ungetc(c, fp);
@@ -114,10 +127,9 @@ void skipwhitespace(FILE *fp){
     char c = fgetc(fp);
     //skip the whitespace
     while(isspace(c)) c = fgetc(fp);
-
     //skip comments
     if(c == '/'){
-        c == fgetc(fp);
+        c = fgetc(fp);
         //single line comment
         if(c == '/'){
             while(c != '\n') c = fgetc(fp);
@@ -134,7 +146,6 @@ void skipwhitespace(FILE *fp){
     }
 
     //make sure there isn't more space
-    c = fgetc(fp);
     if(isspace(c)) skipwhitespace(fp);
 
     //make sure there isn't more comments
@@ -163,9 +174,12 @@ lexeme_t *lexString(FILE *fp){
     int size = 1;
     char *str = malloc(sizeof(char));
     int i = 0;
-    c = fgetc(fp);
+    char c = fgetc(fp);
     while(c != '\"'){
-        if(c == 'EOF') return parseError(str, fp, ERR_2);
+        if(c == EOF){
+            ungetc(c, fp);
+            return parseError(str, fp, ERR_2);
+        }
         str[i] = c;
 	i++;
 	if(i >= size) str = grow(str, &size);
@@ -182,24 +196,34 @@ lexeme_t *lexNum(FILE *fp){
     int hasdot = 0; int isnegative = 0;
     char *str = malloc(sizeof(char));
     int i = 0;
-    c = fgetc(fp);
-    while(!isspace(c)){
+    char c = fgetc(fp);
+    while(!feof(fp) && (isdigit(c) || c == '.' || c == '-')) {
         if(c == '-'){
             if(i == 0 && isnegative == 0){
                 isnegative = 1;
 	        str[i++] = c;
             }
-            else return parseError(str, fp, ERR_0);
+            else{
+                ungetc(c, fp);
+                return parseError(str, fp, ERR_0);
+            }
         }
         else if(c == '.'){
             if(hasdot == 0){
                 hasdot = 1;
 		str[i++] = c;
             }
-            else return parseError(str, fp, ERR_0);
+            else{
+                ungetc(c, fp);
+                return parseError(str, fp, ERR_0);
+            }
         }
-	else if(!isdigit(c)) return parseError(str, fp, ERR_0);
-        else str[i++] = c;
+	else if(!isdigit(c)){
+            ungetc(c, fp);
+            return parseError(str, fp, ERR_0);
+        }
+        else str[i] = c;
+	i++;
         if(i >= size) str = grow(str, &size);
 	c = fgetc(fp);
     }
@@ -216,7 +240,8 @@ lexeme_t *lexWord(FILE *fp){
     int i = 0;
     char c = fgetc(fp);
     while(isalpha(c) || isdigit(c)){
-        str[i++] = c;
+        str[i] = c;
+        i++;
 	if(i >= size) str = grow(str, &size);
         c = fgetc(fp);
     }
@@ -226,7 +251,7 @@ lexeme_t *lexWord(FILE *fp){
 
 }
 
-lexme_t *lexError(FILE *fp, char *err){
+lexeme_t *lexError(FILE *fp, char *err){
 
     int size = 1;
     char *str = malloc(sizeof(char));
@@ -238,11 +263,11 @@ lexme_t *lexError(FILE *fp, char *err){
         c = fgetc(fp);
     }
 
-    lexeme_t *l = newLexeme();
-    setLexemeValue(str, l);
+    lexeme_t *l = newLexeme(str);
     setLexemeType(ERROR, l);
     setLexemeError(err, l);
 
+    ungetc(c, fp);
     return l;
 
 }
@@ -257,8 +282,8 @@ lexeme_t *parseError(char *str, FILE *fp, char *err){
 
 char *grow(char *str, int *size){
 
-    size *= 2;
-    str = realloc(str, sizeof(char) * size);
+    *size *= 2;
+    str = realloc(str, sizeof(char) * *size);
     return str;
 
 }

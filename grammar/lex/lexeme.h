@@ -11,9 +11,9 @@
 #ifndef __LEXEME_H__
 #define __LEXEME_H__
 
-#define INTEGER "INTEGER"
-#define REAL "REAL
-#define STRING "STRING"
+#define INTEGER_ "INTEGER"
+#define REAL_ "REAL"
+#define STRING_ "STRING"
 #define OPEN_PAREN "OPEN_PAREN"
 #define CLOSE_PAREN "CLOSE_PAREN"
 #define PLUS "PLUS"
@@ -47,6 +47,13 @@
 #define STRUCT "STRUCT"
 #define VAR "VAR"
 #define DEFINE "DEFINE"
+#define PRINT "PRINT"
+#define WHILE "WHILE"
+#define COLON "COLON"
+#define SEMI_COLON "SEMI_COLON"
+#define QUESTION "QUESTION"
+#define DOT "DOT"
+#define END_READ "END_READ"
 
 typedef struct Lexeme_Type lexeme_t;
 
@@ -56,5 +63,6 @@ extern type_t *getLexemeValue(lexeme_t *);
 extern void setLexemeType(char *, lexeme_t *);
 extern void setLexemeValue(char *, lexeme_t *);
 extern void setLexemeError(char *, lexeme_t *);
+extern void printLexeme(FILE *, lexeme_t *);
 
 #endif

@@ -1,7 +1,7 @@
 OPTS= -Wall -Wextra -g
 OBJS= scanner.o type.o lexeme.o lexer.o int.o real.o str.o
 
-all:
+all: scanner.o type.o lexeme.o lexer.o int.o real.o str.o
 	gcc $(OPTS) $(OBJS) -o scanner
 
 scanner.o: lexer.h lexeme.h type.h int.h real.h str.h scanner.c
@@ -10,7 +10,7 @@ scanner.o: lexer.h lexeme.h type.h int.h real.h str.h scanner.c
 type.o: type.h int.h real.h str.h type.c
 	gcc $(OPTS) -c type.c
 
-lexeme.o: lexeme.h type.h lexeme.c
+lexeme.o: lexeme.h int.h real.h str.h type.h lexeme.c
 	gcc $(OPTS) -c lexeme.c
 
 lexer.o: lexer.h lexeme.h type.h lexer.c

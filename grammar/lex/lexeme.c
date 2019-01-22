@@ -20,14 +20,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
+#include "lexeme.h"
 #include "type.h"
+#include "str.h"
+#include "real.h"
+#include "int.h"
 
 /*** STRUCTURE ***/
 struct Lexeme_Type{
 
 	char *type;
 	type_t *value;
-	char *error:
+	char *error;
 
 };
 
@@ -51,12 +56,48 @@ type_t *getLexemeValue(lexeme_t *l){return l->value;}
 void setLexemeType(char *type, lexeme_t *l){l->type = type;}
 void setLexemeValue(char *val, lexeme_t *l){l->value = newType(val);}
 void setLexemeError(char *err, lexeme_t *l){l->error = err;}
+void printLexeme(FILE *fp, lexeme_t *l){
+
+    string *s; integer *i; real *r;
+    //handle error type first
+    if(strcmp(l->type, "ERROR") == 0){
+        char *err_token = getTypeValue(l->value);
+        fprintf(stderr, "%s\n\"%s\" is the invalid token.\n", 
+                l->error, err_token);
+        return ;
+    }
+
+    //normal type now
+    int t = getTypeCast(l->value);
+    switch(t){
+        case STR:
+            s = getTypeValue(l->value);
+            printString(fp, s);
+            fprintf(fp, "\t%s", l->type);
+	    break;
+        case INT:
+            i = getTypeValue(l->value);
+	    printInteger(fp, i);
+	    fprintf(fp, "\t%s", l->type);
+	    break;
+        case DBL:
+	    r = getTypeValue(l->value);
+	    printReal(fp, r);
+	    fprintf(fp, "\t%s", l->type);
+	    break;
+    }
+
+}
 
 /*** PRIVATE FUNCTION DEFINITIONS ***/
 char *parse(char *str){
 
     int size = strlen(str);
     char c = str[0];
+    if(isalpha(c)){
+        if(atoi(str)) return INTEGER_;
+        else if(atof(str)) return REAL_;
+    }
     switch(size){
         case 1:
             if(c == '(') return OPEN_PAREN;
@@ -75,7 +116,7 @@ char *parse(char *str){
 	    else if(c == '?') return QUESTION;
 	    else if(c == ';') return SEMI_COLON;
 	    else if(c == ':') return COLON;
-	    else return STRING;
+	    else return STRING_;
 	    break;
 	case 2:
 	    if(strcmp(str, "++") == 0) return PLUS_PLUS;
@@ -85,36 +126,36 @@ char *parse(char *str){
 	    else if(strcmp(str, "<=") == 0) return LESS_THAN_EQUALS;
 	    else if(strcmp(str, "OR") == 0) return OR;
 	    else if(strcmp(str, "IF") == 0) return IF;
-	    else return STRING;
+	    else return STRING_;
 	    break;
 	case 3:
 	    if(strcmp(str, "AND") == 0) return AND;
 	    else if(strcmp(str, "XOR") == 0) return XOR;
 	    else if(strcmp(str, "END") == 0) return END;
 	    else if(strcmp(str, "VAR") == 0) return VAR;
-            else return STRING;
+            else return STRING_;
 	    break;
 	case 4:
 	    if(strcmp(str, "ELSE") == 0) return ELSE;
 	    else if(strcmp(str, "STAR") == 0) return STAR;
-	    else return STRING;
+	    else return STRING_;
 	    break;
 	case 5:
 	    if(strcmp(str, "WHILE") == 0) return WHILE;
 	    else if(strcmp(str, "BREAK") == 0) return BREAK;
 	    else if(strcmp(str, "BEGIN") == 0) return BEGIN;
 	    else if(strcmp(str, "PRINT") == 0) return PRINT;
-	    else return STRING;
+	    else return STRING_;
 	    break;
 	case 6:
 	    if(strcmp(str, "STRUCT") == 0) return STRUCT;
 	    else if(strcmp(str, "DEFINE") == 0) return DEFINE;
 	    else if(strcmp(str, "RETURN") == 0) return RETURN;
-	    else return STRING;
+	    else return STRING_;
 	    break;
 	default:
 	    if(strcmp(str, "CONTINUE") == 0) return CONTINUE;
-	    else return STRING;
+	    else return STRING_;
     }
 
 }
