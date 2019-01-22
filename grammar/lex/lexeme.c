@@ -38,6 +38,7 @@ struct Lexeme_Type{
 
 /*** PRIVATE FUNCTION DECLARATIONS ***/
 char *parse(char *);
+int hasdot(char *);
 
 /*** PUBLIC/MAIN FUNCTION DEFINITIONS ***/
 lexeme_t *newLexeme(char *item){
@@ -61,7 +62,8 @@ void printLexeme(FILE *fp, lexeme_t *l){
     string *s; integer *i; real *r;
     //handle error type first
     if(strcmp(l->type, "ERROR") == 0){
-        char *err_token = getTypeValue(l->value);
+        string *e = getTypeValue(l->value);
+        char *err_token = getString(e);
         fprintf(stderr, "%s\n\"%s\" is the invalid token.\n", 
                 l->error, err_token);
         return ;
@@ -94,9 +96,9 @@ char *parse(char *str){
 
     int size = strlen(str);
     char c = str[0];
-    if(isalpha(c)){
-        if(atoi(str)) return INTEGER_;
-        else if(atof(str)) return REAL_;
+    if(isdigit(c)){
+        if(hasdot(str)) return REAL_;
+        else return INTEGER_;
     }
     switch(size){
         case 1:
@@ -157,5 +159,19 @@ char *parse(char *str){
 	    if(strcmp(str, "CONTINUE") == 0) return CONTINUE;
 	    else return STRING_;
     }
+
+}
+
+int hasdot(char *str){
+
+    int i = 0;
+    int size = strlen(str);
+    int dot = 0;
+    while(i < size){
+        if(str[i] == '.') dot = 1;
+        i++;
+    }
+
+    return dot;
 
 }
