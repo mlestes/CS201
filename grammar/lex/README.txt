@@ -20,7 +20,7 @@ your_linux_name:$ make run
 //test4
 //test5
 
--All code written by Murray Estes (email: mlestes1@crimson.ua.edu).
+-All code written by Murray Estes (REDACTED).
 
 -Uses wrapper functions for types (integer, real, string) IOT minimize use of
  generic pointers while allowing for one keyword to declare any variable type.
