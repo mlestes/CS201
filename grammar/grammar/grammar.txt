@@ -2,8 +2,8 @@ unary : INTEGER
       | REAL
       | VARIABLE
       | VARIABLE OPEN_PAREN expressionlist CLOSE_PAREN
-      | prefix unary
-      | unary suffix
+      | prefix VARIABLE
+      | VARIABLE suffix
       | OPEN_PAREN expression CLOSE_PAREN
       | STRING
       | RETURN expression
@@ -51,7 +51,7 @@ prefix : PLUS
        | MINUS
        | PLUS_PLUS
        | MINUS_MINUS
-       | AND
+       | ADDRESS
        | STAR
 
 suffix : PLUS_PLUS
@@ -91,8 +91,8 @@ parameterlist : VARIABLE
 structdef : STRUCT VARIABLE block
 
 program : funcdef
-        | structdef
-        | expression
         | funcdef program
-        | expression program
+        | structdef
         | structdef program
+        | expression
+        | expression program
