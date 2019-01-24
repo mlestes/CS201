@@ -139,7 +139,11 @@ void skipwhitespace(FILE *fp){
             comment_loop:
             while(c != '*') c = fgetc(fp);
             c = fgetc(fp);
-            if(c != '/') goto comment_loop;
+            if(c != '/'){
+                ungetc(c, fp);
+                goto comment_loop;
+            }
+            else c = fgetc(fp);
         }
 	//not a comment at all
         else ungetc(c, fp);
@@ -160,7 +164,7 @@ void skipwhitespace(FILE *fp){
 	else{
             //not a comment, still push back the chars
             ungetc(d, fp);
-            ungetc(c, fp);
+	    ungetc(c, fp);
         }
     }
 
@@ -186,6 +190,7 @@ lexeme_t *lexString(FILE *fp){
         c = fgetc(fp);
     }
 
+    str[i] = '\0';
     return newLexeme(str);
 
 }
@@ -218,17 +223,13 @@ lexeme_t *lexNum(FILE *fp){
                 return parseError(str, fp, ERR_0);
             }
         }
-	else if(!isdigit(c)){
-            ungetc(c, fp);
-            return parseError(str, fp, ERR_0);
-        }
-        else str[i] = c;
-	i++;
+        else str[i++] = c;
         if(i >= size) str = grow(str, &size);
 	c = fgetc(fp);
     }
 
     ungetc(c, fp);
+    str[i] = '\0';
     return newLexeme(str);
 
 }
@@ -240,14 +241,16 @@ lexeme_t *lexWord(FILE *fp){
     int i = 0;
     char c = fgetc(fp);
     while(isalpha(c) || isdigit(c)){
-        str[i] = c;
-        i++;
+        str[i++] = c;
 	if(i >= size) str = grow(str, &size);
         c = fgetc(fp);
     }
     
     ungetc(c, fp);
-    return newLexeme(str);
+    str[i] = '\0';
+    lexeme_t *l = newLexeme(str);
+    if(strcmp(getLexemeType(l), STRING_) == 0) setLexemeType(VARIABLE, l);
+    return l;
 
 }
 
@@ -262,7 +265,8 @@ lexeme_t *lexError(FILE *fp, char *err){
 	if(i >= size) str = grow(str, &size);
         c = fgetc(fp);
     }
-
+    
+    str[i] = '\0';
     lexeme_t *l = newLexeme(str);
     setLexemeType(ERROR, l);
     setLexemeError(err, l);
