@@ -36,6 +36,7 @@
 #define XOR "XOR"
 #define VARIABLE "VARIABLE"
 #define STAR "STAR"
+#define ADDRESS "ADDRESS"
 #define ERROR "ERROR"
 #define IF "IF"
 #define ELSE "ELSE"

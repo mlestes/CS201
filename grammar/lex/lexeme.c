@@ -118,6 +118,7 @@ char *parse(char *str){
 	    else if(c == '?') return QUESTION;
 	    else if(c == ';') return SEMI_COLON;
 	    else if(c == ':') return COLON;
+	    else if(c == '&') return ADDRESS;
 	    else return STRING_;
 	    break;
 	case 2:

@@ -105,6 +105,7 @@ lexeme_t *lex(FILE *fp){
                 return newLexeme("=");
             }
         case '?': return newLexeme("?");
+        case '&': return newLexeme("&");
         default:
             if(isdigit(c)){
                 ungetc(c, fp);
