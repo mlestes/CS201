@@ -136,14 +136,12 @@ void skipwhitespace(FILE *fp){
         }
         //multi-line comment
         else if(c == '*'){
-            comment_loop:
-            while(c != '*') c = fgetc(fp);
             c = fgetc(fp);
-            if(c != '/'){
-                ungetc(c, fp);
-                goto comment_loop;
-            }
-            else c = fgetc(fp);
+            comment_loop:
+	    while(c != '*') c = fgetc(fp);
+	    c = fgetc(fp);
+	    if(c != '/') goto comment_loop;
+	    else c = fgetc(fp);
         }
 	//not a comment at all
         else ungetc(c, fp);
