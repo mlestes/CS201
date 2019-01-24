@@ -18,9 +18,9 @@
 #include "lexer.h"
 #include "lexeme.h"
 
-#define ERR_0 "Invalid number string.\n"
-#define ERR_1 "Unknown token type.\n"
-#define ERR_2 "Invalid string. Expected '\"' missing.\n"
+#define ERR_0 "Invalid number string."
+#define ERR_1 "Unknown token type."
+#define ERR_2 "Invalid string. Expected '\"' missing."
 
 /*** PRIVATE FUNCTION DECLARATIONS ***/
 void skipwhitespace(FILE *);
