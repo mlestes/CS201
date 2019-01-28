@@ -2,7 +2,7 @@ unary : INTEGER
       | REAL
       | VARIABLE
       | VARIABLE OPEN_PAREN expressionlist CLOSE_PAREN
-      | prefix VARIABLE
+      | prefix unary
       | VARIABLE suffix
       | OPEN_PAREN expression CLOSE_PAREN
       | STRING
@@ -10,8 +10,6 @@ unary : INTEGER
       | BREAK
       | CONTINUE
       | PRINT OPEN_PAREN printstatement CLOSE_PAREN
-
-ternary : expression QUESTION expression COLON expression
 
 expression : unary
            | unary operator expression
@@ -34,6 +32,8 @@ operator : PLUS
          | MOD
          | POW
          | ASSIGN
+         | QUESTION
+         | COLON
          | DOT
 
 comparator: EQUALS_EQUALS
@@ -72,13 +72,12 @@ statementlist : statement
               | EMPTY
 
 statement : expression SEMI_COLON
-          | ternary SEMI_COLON
-          | vardef SEMI_COLON
+          | vardef
           | funcdef 
           | ifstate
           | whilestate
 
-vardef : VAR VARIABLE ASSIGN expression
+vardef : VAR VARIABLE ASSIGN expression SEMI_COLON
        | VAR VARIABLE
 
 funcdef : DEFINE VARIABLE OPEN_PAREN parameterlist CLOSE_PAREN block
@@ -94,5 +93,5 @@ program : funcdef
         | funcdef program
         | structdef
         | structdef program
-        | expression
-        | expression program
+        | vardef
+        | vardef program
