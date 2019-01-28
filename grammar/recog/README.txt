@@ -53,7 +53,7 @@ your_linux_name:$ make test5
  looking for either of the "DEFINE" or "VAR" or "STRUCT" keywords and not "DE",
  it assumes there isn't a program so it looks for "END_READ", which isn't "DE".
 
--All code written by Murray Estes (email: mlestes1@crimson.ua.edu).
+-All code written by Murray Estes (REDACTED).
 
 -Uses wrapper functions for types (integer, real, string) IOT minimize use of
  generic pointers while allowing for one keyword to declare any variable type.
