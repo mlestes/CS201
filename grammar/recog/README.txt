@@ -17,7 +17,8 @@ your_linux_name:$ ./recognizer program.esl
 //some output
 
 -A make run rule is supplied, however, it will stop at test3, since the
- recognizer returns an error for that test.
+ recognizer returns an error for that test. "make test" functions the same as
+ "make run".
 
 -To run the supplied test cases, use the test rules
 your_linux_name:$ make test1
@@ -53,7 +54,7 @@ your_linux_name:$ make test5
  looking for either of the "DEFINE" or "VAR" or "STRUCT" keywords and not "DE",
  it assumes there isn't a program so it looks for "END_READ", which isn't "DE".
 
--All code written by Murray Estes (REDACTED).
+-All code written by Murray Estes (email: mlestes1@crimson.ua.edu).
 
 -Uses wrapper functions for types (integer, real, string) IOT minimize use of
  generic pointers while allowing for one keyword to declare any variable type.
