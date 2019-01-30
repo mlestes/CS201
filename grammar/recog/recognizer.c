@@ -84,7 +84,7 @@ int main(int argc, char **argv){
     //attempt to open the file
     fp = fopen(argv[1], "r");
     if(!fp){ //attempt failed
-        fprintf(stderr, "Error: could not open file \"%s\". "
+        fprintf(stderr, "Error: could not open file \"%s\".\n"
 			"File either missing or spelled incorrectly.\n", 
 			argv[1]);
 	exit(-1);
