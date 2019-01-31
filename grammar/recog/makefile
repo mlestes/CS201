@@ -1,11 +1,14 @@
 OPTS= -Wall -Wextra -g
-OBJS= recognizer.o type.o lexeme.o lexer.o int.o real.o str.o
+OBJS= recognizer.o parse.o type.o lexeme.o lexer.o int.o real.o str.o
 
-all: recognizer.o type.o lexeme.o lexer.o int.o real.o str.o
+all: $(OBJS)
 	gcc $(OPTS) $(OBJS) -o recognizer
 
-recognizer.o: lexer.h lexeme.h type.h int.h real.h str.h recognizer.c
+recognizer.o: lexer.h lexeme.h type.h int.h real.h str.h parse.h recognizer.c
 	gcc $(OPTS) -c recognizer.c
+
+parse.o: lexer.h lexeme.h type.h int.h real.h str.h parse.h parse.c
+	gcc $(OPTS) -c parse.c
 
 type.o: type.h int.h real.h str.h type.c
 	gcc $(OPTS) -c type.c
