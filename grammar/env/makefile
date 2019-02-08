@@ -4,7 +4,7 @@ OBJS= environment.o env.o type.o lexeme.o int.o real.o str.o
 all: $(OBJS)
 	gcc $(OPTS) $(OBJS) -o environment
 
-environment.o: lexer.h lexeme.h type.h int.h real.h str.h parse.h environment.c
+environment.o: lexeme.h type.h int.h real.h str.h environment.c
 	gcc $(OPTS) -c environment.c
 
 env.o: env.h type.h lexeme.h env.c
@@ -15,12 +15,6 @@ type.o: type.h int.h real.h str.h type.c
 
 lexeme.o: lexeme.h int.h real.h str.h type.h lexeme.c
 	gcc $(OPTS) -c lexeme.c
-
-lexer.o: lexer.h lexeme.h type.h lexer.c
-	gcc $(OPTS) -c lexer.c
-
-parse.o: lexer.h lexeme.h type.h int.h real.h str.h parse.h parse.c
-	gcc $(OPTS) -c parse.c
 	
 int.o: int.h int.c
 	gcc $(OPTS) -c int.c
