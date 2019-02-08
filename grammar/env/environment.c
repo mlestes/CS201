@@ -31,8 +31,11 @@ int main(void){
     insert(var, val, env);
     printf("Insertion complete!\n");
 
+//case: show the global environment
+    print_env(stdout, env);
+
 //case: creating a local environment
-    printf("Extending the environment...\n");
+    printf("\nExtending the environment...\n");
     var = newLexeme("y");
     val = newLexeme("5");
     lexeme_t *env1 = extend(var, val, env);
@@ -43,8 +46,11 @@ int main(void){
     insert(var, val, env1);
     printf("Insertion complete!\n");
 
+//case: show the environment
+    print_env(stdout, env1);
+
 //case: looking up a local variable from local scope
-    printf("Looking up variable y in the local environment...\n");
+    printf("\nLooking up variable y in the local environment...\n");
     lexeme_t *y = lookup(newLexeme("y"), env1);
     printf("Success! variable y = ");
     printLexeme(stdout, y);
@@ -70,20 +76,29 @@ int main(void){
     printLexeme(stdout, lookup(newLexeme("x"), env2));
     printf("\n");
 
+//case: show the environment
+    print_env(stdout, env2);
+
 //case: inserting a variable into an environment with a pre-existing variable
-    printf("Inserting variable z into first local environment...\n");
+    printf("\nInserting variable z into first local environment...\n");
     insert(newLexeme("z"), newLexeme(NULL), env1);
     printf("Insert complete!\n");
 
+//case: show the environment
+    print_env(stdout, env1);
+
 //case: updating the new variable
-    printf("Updating variable z with value 6...\n");
+    printf("\nUpdating variable z with value 6...\n");
     update(newLexeme("z"), newLexeme("6"), env1);
     printf("Update complete! Variable z = ");
     printLexeme(stdout, lookup(newLexeme("z"), env1));
     printf("\n");
 
+//case: show the environment
+    print_env(stdout, env1);
+
 //case: looking up a variable out of scope
-    printf("Looking up variable y from outside scope...\n");
+    printf("\nLooking up variable y from outside scope...\n");
     y = lookup(newLexeme("y"), env2); //should fail
     printf("Variable y = ");
     printLexeme(stdout, y);

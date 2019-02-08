@@ -56,12 +56,12 @@ lexeme_t *lookup(lexeme_t *var, lexeme_t *env){
 
     while(env){
         lexeme_t *vars = car(env);
-	lexeme_t *val = car(cdr(env));
-	while(vars){
+	    lexeme_t *val = car(cdr(env));
+	    while(vars){
             if(same(var, car(vars))) return car(val);
-	    vars = cdr(vars);
-	    val = cdr(val);
-	}
+	        vars = cdr(vars);
+	        val = cdr(val);
+	    }
 	env = cdr(cdr(env));
     }
 
@@ -77,15 +77,15 @@ lexeme_t *update(lexeme_t *var, lexeme_t *val, lexeme_t *env){
 
     while(env){
         lexeme_t *vars = car(env);
-	lexeme_t *vals = car(cdr(env));
-	while(vars){
+	    lexeme_t *vals = car(cdr(env));
+	    while(vars){
             if(same(var, car(vars))){
                 setCar(val, vals);
-		return val;
-	    }
+		        return val;
+	        }
 	    vars = cdr(vars);
 	    vals = cdr(vals);
-	}
+	    }
 	env = cdr(cdr(env));
     }
 
@@ -109,6 +109,28 @@ lexeme_t *extend(lexeme_t *var, lexeme_t *val, lexeme_t *env){
     return cons("ENV", var, cons("ENV", val, env));
 }
 
+void print_env(FILE *fp, lexeme_t *env){
+    
+    fprintf(fp, "The environment is...\n");
+    while(env){
+        lexeme_t *vars = car(env);
+	    lexeme_t *val = car(cdr(env));
+	    while(vars){
+            if(car(vars)){
+                printLexeme(fp, car(vars));
+                fprintf(fp, " = ");
+                if(getLexemeValue(car(val))) printLexeme(fp, car(val));
+                else fprintf(fp, "unassigned");
+                fprintf(fp, "\n");
+            }
+	        vars = cdr(vars);
+	        val = cdr(val);
+	    }
+	env = cdr(cdr(env));
+
+    }
+
+}
 /*** PRIVATE FUNCTION DEFINITONS ***/
 lexeme_t *cons(char *type, lexeme_t *l, lexeme_t *r){
 
