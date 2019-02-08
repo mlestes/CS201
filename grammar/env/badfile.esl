@@ -1,0 +1,6 @@
+VAR x = 27;
+
+DE|INE F@NCi0N()
+BEGIN
+    PRINT("This should not be reached by the scanner");
+END
