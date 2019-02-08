@@ -73,7 +73,7 @@ lexeme_t *lookup(lexeme_t *var, lexeme_t *env){
 
 }
 
-void update(lexeme_t *var, lexeme_t *val, lexeme_t *env){
+lexeme_t *update(lexeme_t *var, lexeme_t *val, lexeme_t *env){
 
     while(env){
         lexeme_t *vars = car(env);
@@ -81,7 +81,7 @@ void update(lexeme_t *var, lexeme_t *val, lexeme_t *env){
 	while(vars){
             if(same(var, car(vars))){
                 setCar(val, vals);
-		return ;
+		return val;
 	    }
 	    vars = cdr(vars);
 	    vals = cdr(vals);
@@ -93,6 +93,7 @@ void update(lexeme_t *var, lexeme_t *val, lexeme_t *env){
     printLexeme(stderr, var);
     fprintf(stderr, " is undefined or out of scope.\n");
     exit(-1);
+    return NULL;
 
 }
 
@@ -104,8 +105,8 @@ lexeme_t *insert(lexeme_t *var, lexeme_t *val, lexeme_t *env){
     return car(env);
 }
 
-lexeme_t *extend(lexeme_t *env){
-    return cons("ENV", NULL, cons("ENV", NULL, env));
+lexeme_t *extend(lexeme_t *var, lexeme_t *val, lexeme_t *env){
+    return cons("ENV", var, cons("ENV", val, env));
 }
 
 /*** PRIVATE FUNCTION DEFINITONS ***/

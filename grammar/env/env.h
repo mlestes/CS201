@@ -11,8 +11,8 @@
 
 lexeme_t *newEnv(void);
 lexeme_t *lookup(lexeme_t *, lexeme_t *);
-void update(lexeme_t *, lexeme_t *, lexeme_t *);
+lexeme_t *update(lexeme_t *, lexeme_t *, lexeme_t *);
 lexeme_t *insert(lexeme_t *, lexeme_t *, lexeme_t *);
-lexeme_t *extend(lexeme_t *);
+lexeme_t *extend(lexeme_t *, lexeme_t *, lexeme_t *);
 
 #endif

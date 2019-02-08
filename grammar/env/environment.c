@@ -35,7 +35,7 @@ int main(void){
     printf("Extending the environment...\n");
     var = newLexeme("y");
     val = newLexeme("5");
-    lexeme_t *env1 = extend(env);
+    lexeme_t *env1 = extend(var, val, env);
     printf("Extension complete!\n");
 
 //case: inserting into the local environemnt
@@ -60,7 +60,7 @@ int main(void){
 
 //case: creating another local environment, not accessible from the first
     printf("Extending the environment...\n");
-    lexeme_t *env2 = extend(env);
+    lexeme_t *env2 = extend(newLexeme("non"), newLexeme(NULL), env);
     printf("Extension complete!\n");
 
 //case: updating the global variable from the new local scope
