@@ -14,6 +14,9 @@
 #include "real.h"
 #include "int.h"
 
+#define GLOBAL 0
+#define LOCAL 1
+
 /*** HELPER FUNCTION DECLARATIONS ***/
 //none
 
@@ -32,7 +35,7 @@ int main(void){
     printf("Insertion complete!\n");
 
 //case: show the global environment
-    print_env(stdout, env);
+    print_env(stdout, env, LOCAL);
 
 //case: creating a local environment
     printf("\nExtending the environment...\n");
@@ -47,7 +50,7 @@ int main(void){
     printf("Insertion complete!\n");
 
 //case: show the environment
-    print_env(stdout, env1);
+    print_env(stdout, env1, LOCAL);
 
 //case: looking up a local variable from local scope
     printf("\nLooking up variable y in the local environment...\n");
@@ -77,7 +80,7 @@ int main(void){
     printf("\n");
 
 //case: show the environment
-    print_env(stdout, env2);
+    print_env(stdout, env2, GLOBAL);
 
 //case: inserting a variable into an environment with a pre-existing variable
     printf("\nInserting variable z into first local environment...\n");
@@ -85,7 +88,7 @@ int main(void){
     printf("Insert complete!\n");
 
 //case: show the environment
-    print_env(stdout, env1);
+    print_env(stdout, env1, LOCAL);
 
 //case: updating the new variable
     printf("\nUpdating variable z with value 6...\n");
@@ -95,7 +98,7 @@ int main(void){
     printf("\n");
 
 //case: show the environment
-    print_env(stdout, env1);
+    print_env(stdout, env1, GLOBAL);
 
 //case: looking up a variable out of scope
     printf("\nLooking up variable y from outside scope...\n");
