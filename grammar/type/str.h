@@ -9,13 +9,13 @@
 /*                                                                           */
 /*****************************************************************************/
 
-typedef struct STRING string;
+typedef struct String_Type string_t;
 
-extern string *newString(char *);
-extern char *getString(string *);
-extern char *setString(string *, char *);
+extern string_t *newString(char *);
+extern char *getString(string_t *);
+extern char *setString(string_t *, char *);
 extern void printString(FILE *, void *);
-extern int sizeString(string *);
+extern int sizeString(string_t *);
 extern int compareString(void *, void *);
 
 #endif

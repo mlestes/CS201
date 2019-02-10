@@ -29,9 +29,9 @@
 struct Type_type{
     
     int cast;
-    integer *ival;
-    real *rval;
-    string *sval;
+    integer_t *ival;
+    real_t *rval;
+    string_t *sval;
 
 };
 
@@ -47,18 +47,18 @@ type_t *newType(void *item){
     switch (parsed){
         case INT:
             t->cast = INT;
-	    int i = atoi(str);
-	    t->ival = newInteger(i);
-	    break;
-	case DBL:
-	    t->cast = DBL;
-	    double r = atof(str);
-	    t->rval = newReal(r);
-	    break;
-	case STR:
-	    t->cast = STR;
-	    t->sval = newString(str);
-	    break;
+	    	int i = atoi(str);
+	    	t->ival = newInteger(i);
+	    	break;
+		case DBL:
+	    	t->cast = DBL;
+	    	double r = atof(str);
+	    	t->rval = newReal(r);
+	    	break;
+		case STR:
+		    t->cast = STR;
+		    t->sval = newString(str);
+	    	break;
     }
 
     return t;

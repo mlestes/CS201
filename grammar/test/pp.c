@@ -29,6 +29,7 @@ int line = 1;
 /*** PRIVATE FUNCTION DECLARATIONS ***/
 FILE *file_init(int, char **);
 void glb_init(int, char **);
+void print_tree(lexeme_t *, int);
 
 /*** MAIN/PUBLIC FUNCTION DEFINITITIONS ***/
 int main(int argc, char **argv){
@@ -36,9 +37,9 @@ int main(int argc, char **argv){
     glb_init(argc, argv);
 
     //read the source code, stopping at either EOF or error
-    program();
+    lexeme_t *tree = program();
     match(END_READ);
-    fprintf(stdout, "Parse complete. No errors.\n");
+    print_tree(tree, 0);
     fclose(fp);
 
     return 0;
@@ -84,4 +85,15 @@ void glb_init(int argc, char **argv){
     env = newEnv();
     current = lex(fp);
 
+}
+
+void print_tree(lexeme_t *tree, int level){
+
+    if(!tree) return;
+    if(getLexemeLeft(tree)) print_tree(getLexemeLeft(tree), level);
+    if(getLexemeRight(tree)) print_tree(getLexemeRight(tree), level);
+    if(getLexemeValue(tree)) {
+        printLexeme(stdout, tree);
+        printf("\n");
+    }
 }

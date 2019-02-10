@@ -26,7 +26,7 @@
 /*                                                                           */
 /*****************************************************************************/
 
-struct REAL{
+struct Real_Type{
 
     double value;
 
@@ -36,9 +36,9 @@ struct REAL{
 //none
 
 /*** PUBLIC METHODS ***/
-real *newReal(double value){
+real_t *newReal(double value){
 
-    real *r = malloc(sizeof(real));
+    real_t *r = malloc(sizeof(real_t));
     if(r == 0){
         fprintf(stderr, "Failed to allocate memory!\n");
         exit(1);
@@ -49,8 +49,8 @@ real *newReal(double value){
 
     }
 
-double getReal(real *r){return r->value;}
-double setReal(real *r, double value){
+double getReal(real_t *r){return r->value;}
+double setReal(real_t *r, double value){
 
     double old = r->value;
     r->value = value;
@@ -61,15 +61,15 @@ double setReal(real *r, double value){
 
 void printReal(FILE *fp, void *r){
 
-    real *d = (real *) r;
+    real_t *d = (real_t *) r;
     fprintf(fp, "%f", d->value);
 
     }
 
 int compareReal(void *a, void *b){
 
-    real *alpha = (real *) a;
-    real *beta = (real *) b;
+    real_t *alpha = (real_t *) a;
+    real_t *beta = (real_t *) b;
     return alpha->value - beta->value;
 
     }

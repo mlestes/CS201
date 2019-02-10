@@ -72,11 +72,11 @@ lexeme_t *lex(FILE *fp){
             }
         case '*':
             c = fgetc(fp);
-            if(isspace(c)){
+            if(isspace(c)){ //multiplication
                 ungetc(c, fp);
                 return newLexeme("*");
             }
-            else{
+            else{ //pointer
                 ungetc(c, fp);
                 return newLexeme("STAR");
             }
@@ -131,47 +131,47 @@ void skipwhitespace(FILE *fp){
     c = fgetc(fp);
     if(c == '/'){
         d = fgetc(fp);
-	if(d == '/'){
+	    if(d == '/'){
             c = fgetc(fp);
-	    while(c != '\n') c = fgetc(fp);
-	}
-	else if(d == '*'){
+	        while(c != '\n') c = fgetc(fp);
+	    }   
+	    else if(d == '*'){
             comment:
-	    while(c != '*'){
+	        while(c != '*'){
 	        if(c == '\n') line++;
-		c = fgetc(fp);
+		    c = fgetc(fp);
 	    }
 	    c = fgetc(fp);
 	    if(c != '/') goto comment;
 	    else c = fgetc(fp);
-	}
-	else{
+	    }   
+	    else{
             ungetc(d, fp);
-	    ungetc(c, fp);
-	}
+	        ungetc(c, fp);
+	    }   
     }
     else if(isspace(c)){
         while(isspace(c)){
             if(c == '\n') line++;
-	    c = fgetc(fp);
-	}
+	        c = fgetc(fp);
+	    }
     }
 
     if(c == '/'){
         d = fgetc(fp);
-	if(d == '/' || d == '*'){
+	    if(d == '/' || d == '*'){
             ungetc(d, fp);
-	    ungetc(c, fp);
-	    skipwhitespace(fp);
-	}
+	        ungetc(c, fp);
+	        skipwhitespace(fp);
+	    }   
         else{
             ungetc(d, fp);
-	    ungetc(c, fp);
-	}
+    	    ungetc(c, fp);
+	    }
     }
     else if(isspace(c)){
         ungetc(c, fp);
-	skipwhitespace(fp);
+	    skipwhitespace(fp);
     }
     else ungetc(c, fp);
 
@@ -189,14 +189,14 @@ lexeme_t *lexString(FILE *fp){
             return parseError(str, fp, ERR_2);
         }
         str[i] = c;
-	i++;
-	if(i >= size) str = grow(str, &size);
+	    i++;
+	    if(i >= size) str = grow(str, &size);
         c = fgetc(fp);
     }
 
     str[i] = '\0';
     lexeme_t *l = newLexeme(str);
-    setLexemeType(STRING_, l);
+    setLexemeType(STRING, l);
     return l;
 
 }
@@ -212,7 +212,7 @@ lexeme_t *lexNum(FILE *fp){
         if(c == '-'){
             if(i == 0 && isnegative == 0){
                 isnegative = 1;
-	        str[i++] = c;
+	            str[i++] = c;
             }
             else{
                 ungetc(c, fp);
@@ -222,7 +222,7 @@ lexeme_t *lexNum(FILE *fp){
         else if(c == '.'){
             if(hasdot == 0){
                 hasdot = 1;
-		str[i++] = c;
+		        str[i++] = c;
             }
             else{
                 ungetc(c, fp);
@@ -231,7 +231,7 @@ lexeme_t *lexNum(FILE *fp){
         }
         else str[i++] = c;
         if(i >= size) str = grow(str, &size);
-	c = fgetc(fp);
+	    c = fgetc(fp);
     }
 
     ungetc(c, fp);
@@ -248,14 +248,14 @@ lexeme_t *lexWord(FILE *fp){
     char c = fgetc(fp);
     while(isalpha(c) || isdigit(c)){
         str[i++] = c;
-	if(i >= size) str = grow(str, &size);
+	    if(i >= size) str = grow(str, &size);
         c = fgetc(fp);
     }
     
     ungetc(c, fp);
     str[i] = '\0';
     lexeme_t *l = newLexeme(str);
-    if(strcmp(getLexemeType(l), STRING_) == 0) setLexemeType(VARIABLE, l);
+    if(getLexemeType(l) == STRING) setLexemeType(VARIABLE, l);
     return l;
 
 }
@@ -268,7 +268,7 @@ lexeme_t *lexError(FILE *fp, char *err){
     char c = fgetc(fp);
     while(!isspace(c)){
         str[i++] = c;
-	if(i >= size) str = grow(str, &size);
+	    if(i >= size) str = grow(str, &size);
         c = fgetc(fp);
     }
     

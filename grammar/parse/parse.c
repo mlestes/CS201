@@ -38,48 +38,130 @@ lexeme_t *advance(void){
 
 }
 
-lexeme_t *match(char *type){
+lexeme_t *match(int type){
 
     if(check(type)) return advance();
     else return parse_error(type);
 
 }
 
-int check(char *type){
+int check(int type){
 
-    char *l_type = getLexemeType(current);
-    if(strcmp(type, l_type) == 0) return TRUE;
+    int l_type = getLexemeType(current);
+    if(type == l_type) return TRUE;
     else return FALSE;
 
 }
 
-lexeme_t *parse_error(char *type){
+lexeme_t *parse_error(int type){
 
-    char *err_type = getLexemeType(current);
+    char *str, *err_str;
+    int err_type = getLexemeType(current);
+    switch(type){
+        case INTEGER: str = "INTEGER"; break;
+        case REAL: str = "REAL"; break;
+        case STRING: str = "STRING"; break;
+        case OPEN_PAREN: str = "OPEN_PAREN"; break;
+        case CLOSE_PAREN: str = "CLOSE_PAREN"; break;
+        case PLUS: str = "PLUS"; break;
+        case MINUS: str = "MINUS"; break;
+        case TIMES: str = "TIMES"; break;
+        case DIVIDE: str = "DIVIDE"; break;
+        case MOD: str = "MOD"; break;
+        case POW: str = "POW"; break;
+        case PLUS_PLUS: str = "PLUS_PLUS"; break;
+        case MINUS_MINUS: str = "MINUS_MINUS"; break;
+        case ASSIGN: str = "ASSIGN"; break;
+        case STAR: str = "STAR"; break;
+        case ADDRESS: str = "ADDRESS"; break;
+        case COLON: str = "COLON"; break;
+        case SEMI_COLON: str = "SEMI_COLON"; break;
+        case QUESTION: str = "QUESTION"; break;
+        case DOT: str = "DOT"; break;
+        case GREATER_THAN: str = "GREATER_THAN"; break;
+        case LESS_THAN: str = "LESS_THAN"; break;
+        case GREATER_THAN_EQUALS: str = "GREATER_THAN_EQUALS"; break;
+        case LESS_THAN_EQUALS: str = "LESS_THAN_EQUALS"; break;
+        case EQUALS_EQUALS: str = "EQUALS_EQUALS"; break;
+        case NOT: str = "NOT"; break;
+        case AND: str = "AND"; break;
+        case OR: str = "OR"; break;
+        case XOR: str = "XOR"; break;
+        case VARIABLE: str = "VARIABLE"; break;
+        case IF: str = "IF"; break;
+        case ELSE: str = "ELSE"; break;
+        case END: str = "END"; break;
+        case BEGIN: str = "BEGIN"; break;
+        case END_READ: str = "END_READ"; break;
+        case PROGRAM: str = "PROGRAM"; break;
+        case BLOCK: str = "BLOCK"; break;
+        case EXPR: str = "EXPR"; break;
+        case OPERATOR: str = "OPERATOR"; break;
+        case COMPARATOR: str = "COMPARATOR"; break;
+        case LOGIC: str = "LOGIC"; break;
+        default: str = "UNKNOWN";
+
+    }
+    switch(err_type){
+        case INTEGER: err_str = "INTEGER"; break;
+        case REAL: err_str = "REAL"; break;
+        case STRING: err_str = "STRING"; break;
+        case OPEN_PAREN: err_str = "OPEN_PAREN"; break;
+        case CLOSE_PAREN: err_str = "CLOSE_PAREN"; break;
+        case PLUS: err_str = "PLUS"; break;
+        case MINUS: err_str = "MINUS"; break;
+        case TIMES: err_str = "TIMES"; break;
+        case DIVIDE: err_str = "DIVIDE"; break;
+        case MOD: err_str = "MOD"; break;
+        case POW: err_str = "POW"; break;
+        case PLUS_PLUS: err_str = "PLUS_PLUS"; break;
+        case MINUS_MINUS: err_str = "MINUS_MINUS"; break;
+        case ASSIGN: err_str = "ASSIGN"; break;
+        case STAR: err_str = "STAR"; break;
+        case ADDRESS: err_str = "ADDRESS"; break;
+        case COLON: err_str = "COLON"; break;
+        case SEMI_COLON: err_str = "SEMI_COLON"; break;
+        case QUESTION: err_str = "QUESTION"; break;
+        case DOT: err_str = "DOT"; break;
+        case GREATER_THAN: err_str = "GREATER_THAN"; break;
+        case LESS_THAN: err_str = "LESS_THAN"; break;
+        case GREATER_THAN_EQUALS: err_str = "GREATER_THAN_EQUALS"; break;
+        case LESS_THAN_EQUALS: err_str = "LESS_THAN_EQUALS"; break;
+        case EQUALS_EQUALS: err_str = "EQUALS_EQUALS"; break;
+        case NOT: err_str = "NOT"; break;
+        case AND: err_str = "AND"; break;
+        case OR: err_str = "OR"; break;
+        case XOR: err_str = "XOR"; break;
+        case VARIABLE: err_str = "VARIABLE"; break;
+        case IF: err_str = "IF"; break;
+        case ELSE: err_str = "ELSE"; break;
+        case END: err_str = "END"; break;
+        case BEGIN: err_str = "BEGIN"; break;
+        case END_READ: err_str = "END_READ"; break;
+        case PROGRAM: err_str = "PROGRAM"; break;
+        case BLOCK: err_str = "BLOCK"; break;
+        case EXPR: err_str = "EXPR"; break;
+        case OPERATOR: err_str = "OPERATOR"; break;
+        case COMPARATOR: err_str = "COMPARATOR"; break;
+        case LOGIC: err_str = "LOGIC"; break;
+        case RETURN: err_str = "RETURN"; break;
+        case BREAK: err_str = "BREAK"; break;
+        case CONTINUE: err_str = "CONTINUE"; break;
+        case STRUCT: err_str = "STRUCT"; break;
+        case VAR: err_str = "VAR"; break;
+        case DEFINE: err_str = "DEFINE"; break;
+        case PRINT: err_str = "PRINT"; break;
+        case WHILE: err_str = "WHILE"; break;
+        default: err_str = "UNKNOWN";
+
+    }
     fprintf(stderr, "Line %d: Error: Expected type %s. Instead got type %s.\n"
-		    "The invalid token is \"", line, type, err_type);
+		    "The invalid token is \"", line, str, err_str);
     printLexeme(stderr, current);
     fprintf(stderr, "\"\n");
     exit(-1);
 
     return 0;
-
-}
-
-lexeme_t *construct(lexeme_t *type, lexeme_t *left, lexeme_t *right){
-
-    //check if type is NULL
-    if(!type) return NULL;
-    //it's not NULL, so check if keyword
-    char *l_type = getLexemeType(type);
-    type_t *l_value = getLexemeValue(type);
-    string *s = getTypeValue(l_value);
-    char *val = getString(s);
-    //if not a keyword, set the type to match the value
-    if(strcmp(val, l_type)) setLexemeType(val, type);
-    setLexemeLeft(type, left);
-    setLexemeRight(type, right);
-    return type;
 
 }
 
@@ -90,14 +172,11 @@ lexeme_t *program(void){
     if(funcdef_pending()) l = funcdef();
     else if(vardef_pending()) l = vardef();
     else if(structdef_pending()) l = structdef();
-    else l = NULL;
 
-//determine if another program rule follows
     if(program_pending()) r = program();
     else r = NULL;
 
-//return the new lexeme
-    return construct(newLexeme("program"), l, r);
+    return cons(PROGRAM, l, r);
 
 }
 
@@ -111,21 +190,16 @@ int program_pending(void){
 
 lexeme_t *funcdef(void){
 
-    lexeme_t *v; lexeme_t *l; lexeme_t *r;
-    v = match(DEFINE);
+    lexeme_t *l, *r1, *r2;
+    match(DEFINE);
     l = match(VARIABLE);
-    if(check(OPEN_PAREN)){
-        match(OPEN_PAREN);
-        parameterlist();
-	match(CLOSE_PAREN);
-	r = block();
-    }
-    else{
-        match(SEMI_COLON);
-	r = NULL;
-    }
+    match(OPEN_PAREN);
+    if(parameterlist_pending()) r1 = parameterlist();
+    else r1 = NULL;
+    match(CLOSE_PAREN);
+    r2 = block();
 
-    return construct(v, l, r);
+    return cons(DEFINE, l, cons(FUNCDEF, r1, r2));
 
 }
 
@@ -138,19 +212,17 @@ int funcdef_pending(void){
 
 lexeme_t *vardef(void){
 
-    lexeme_t *v; lexeme_t *l; lexeme_t *r;
-    v = match(VAR);
+    lexeme_t *l, *r;
+    match(VAR);
     l = match(VARIABLE);
     if(check(ASSIGN)){
-        advance();
-	r = expression();
+        match(ASSIGN);
+        r = expression();
     }
-    else{
-	r = NULL;
-    }
+    else r = NULL;
     match(SEMI_COLON);
 
-    return construct(v, l, r);
+    return cons(VAR, l, r);
 
 }
 
@@ -163,12 +235,12 @@ int vardef_pending(void){
 
 lexeme_t *structdef(void){
 
-    lexeme_t *v; lexeme_t *l; lexeme_t *r;
-    v = match(STRUCT);
+    lexeme_t *l; lexeme_t *r;
+    match(STRUCT);
     l = match(VARIABLE);
     r = block();
 
-    return construct(v, l, r);
+    return cons(STRUCT, l, r);
 
 }
 
@@ -182,12 +254,11 @@ int structdef_pending(void){
 lexeme_t *parameterlist(void){
 
     lexeme_t *l; lexeme_t *r;
-    if(check(VARIABLE)) l = match(VARIABLE);
-    else l = NULL;
+    l = match(VARIABLE);
     if(parameterlist_pending()) r = parameterlist();
     else r = NULL;
 
-    return construct(newLexeme("parameterlist"), l, r);
+    return cons(PARAM_LIST, l, r);
 
 }
 
@@ -203,7 +274,7 @@ lexeme_t *statement(void){
     lexeme_t *l;
     if(expression_pending()){
         l = expression();
-	match(SEMI_COLON);
+	    match(SEMI_COLON);
     }
     else if(vardef_pending()){
         l = vardef();
@@ -212,7 +283,7 @@ lexeme_t *statement(void){
     else if(ifstate_pending()) l = ifstate();
     else if(whilestate_pending()) l = whilestate();
 
-    return construct(newLexeme("statement"), l, NULL);
+    return cons(STATEMENT, l, NULL);
 
 }
 
@@ -231,7 +302,7 @@ lexeme_t *statementlist(void){
     if(statementlist_pending()) r = statementlist();
     else r = NULL;
 
-    return construct(newLexeme("statementlist"), l, r);
+    return cons(STATE_LIST, l, r);
 
 }
 
@@ -249,7 +320,7 @@ lexeme_t *block(void){
     l = statementlist();
     match(END);
 
-    return construct(newLexeme("block"), l, NULL);
+    return cons(BLOCK, l, NULL);
 
 }
 
@@ -262,14 +333,14 @@ int block_pending(void){
 
 lexeme_t *whilestate(void){
 
-    lexeme_t *v; lexeme_t *l; lexeme_t *r;
-    v = match(WHILE);
+    lexeme_t *l; lexeme_t *r;
+    match(WHILE);
     match(OPEN_PAREN);
     l = expression();
     match(CLOSE_PAREN);
     r = block();
 
-    return construct(v, l, r);
+    return cons(WHILE, l, r);
 
 }
 
@@ -282,17 +353,11 @@ int whilestate_pending(void){
 
 lexeme_t *elsestate(void){
 
-    lexeme_t *v; lexeme_t *l;
-    if(check(ELSE)){
-        v = match(ELSE);
-        l = block();
-    }
-    else{
-	v = NULL;
-	l = NULL;
-    }
+    lexeme_t *l;
+    match(ELSE);
+    l = block();
 
-    return construct(v, l, NULL);
+    return cons(ELSE, l, NULL);
 
 }
 
@@ -305,16 +370,16 @@ int elsestate_pending(void){
 
 lexeme_t *ifstate(void){
 
-    lexeme_t *v; lexeme_t *l; lexeme_t *r;
-    v = match(IF);
+    lexeme_t *l, *r1, *r2;
+    match(IF);
     match(OPEN_PAREN);
     l = expression();
     match(CLOSE_PAREN);
-    block();
-    if(elsestate_pending()) r = elsestate();
-    else r = NULL;
+    r1 = block();
+    if(elsestate_pending()) r2 = elsestate();
+    else r2 = NULL;
 
-    return construct(v, l, r);
+    return cons(IF, l, cons(IF, r1, r2));
 
 }
 
@@ -331,7 +396,7 @@ lexeme_t *suffix(void){
     if(check(PLUS_PLUS)) l = match(PLUS_PLUS);
     else l = match(MINUS_MINUS);
 
-    return construct(newLexeme("suffix"), l, NULL);
+    return cons(SUFFIX, l, NULL);
 
 }
 
@@ -352,7 +417,7 @@ lexeme_t *prefix(void){
     else if(check(ADDRESS)) l = match(ADDRESS);
     else l = match(STAR);
 
-    return construct(newLexeme("prefix"), l, NULL);
+    return cons(PREFIX, l, NULL);
 
 }
 
@@ -371,7 +436,7 @@ lexeme_t *logic(void){
     else if(check(OR)) l = match(OR);
     else l = match(XOR);
 
-    return construct(newLexeme("logic"), l, NULL);
+    return cons(LOGIC, l, NULL);
 
 }
 
@@ -392,10 +457,10 @@ lexeme_t *comparator(void){
     else if(check(LESS_THAN_EQUALS)) l = match(LESS_THAN_EQUALS);
     else{
         l = match(NOT);
-	r = comparator();
+    	r = comparator();
     }
 
-    return construct(newLexeme("comparator"), l, r);
+    return cons(COMPARATOR, l, r);
 
 }
 
@@ -422,7 +487,7 @@ lexeme_t *operator(void){
     else if(check(COLON)) l = match(COLON);
     else l = match(DOT);
 
-    return construct(newLexeme("operator"), l, NULL);
+    return cons(OPERATOR, l, NULL);
 
 }
 
@@ -438,18 +503,17 @@ int operator_pending(void){
 lexeme_t *printstatement(void){
  
     lexeme_t *l; lexeme_t *r;
-    if(check(STRING_)) l = match(STRING_);
-    else if(unary_pending()) l = unary();
+    l = unary();
     if(printstatement_pending()) r = printstatement();
     else r = NULL;
 
-    return construct(newLexeme("printstatement"), l, r);
+    return cons(PRINT, l, r);
 
 }
 
 int printstatement_pending(void){
 
-    if(check(STRING_) || check(VARIABLE)) return TRUE;
+    if(check(STRING) || check(VARIABLE)) return TRUE;
     else return FALSE;
 
 }
@@ -457,12 +521,11 @@ int printstatement_pending(void){
 lexeme_t *expressionlist(void){
 
     lexeme_t *l; lexeme_t *r;
-    if(expression_pending()) l = expression();
-    else l = NULL;
+    l = expression();
     if(expressionlist_pending()) r = expressionlist();
     else r = NULL;
 
-    return construct(newLexeme("expressionlist"), l, r);
+    return cons(EXPR_LIST, l, r);
 
 }
 
@@ -479,22 +542,20 @@ lexeme_t *expression(void){
     l = unary();
     if(operator_pending()){
         op = operator();
-	r = expression();
     }
     else if(comparator_pending()){
-	op = comparator();
-	r = expression();
+	    op = comparator();
     }
     else if(logic_pending()){
 	op = logic();
-	r = expression();
     }
     else{
-	op = newLexeme("expression");
-	r = NULL;
+	op = NULL;
     }
+    if(expression_pending()) r = expression();
+    else r = NULL;
 
-    return construct(op, l, r);
+    return cons(EXPR, l, cons(EXPR, op, r));
 
 }
 
@@ -508,47 +569,47 @@ int expression_pending(void){
 lexeme_t *unary(void){
 
     lexeme_t *l; lexeme_t *r = NULL;
-    if(check(STRING_)) l = match(STRING_);
-    else if(check(INTEGER_)) l = match(INTEGER_);
-    else if(check(REAL_)) l = match(REAL_);
+    if(check(STRING)) l = match(STRING);
+    else if(check(INTEGER)) l = match(INTEGER);
+    else if(check(REAL)) l = match(REAL);
     else if(check(VARIABLE)){
         l = match(VARIABLE);
-	if(check(OPEN_PAREN)){
+	    if(check(OPEN_PAREN)){
             match(OPEN_PAREN);
-            r = expressionlist();
-	    match(CLOSE_PAREN);
-	}
-	else if(suffix_pending()) r = suffix();
+            if(expressionlist_pending()) r = expressionlist();
+	        match(CLOSE_PAREN);
+	    }
+	    else if(suffix_pending()) r = suffix();
     }
     else if(check(OPEN_PAREN)){
         match(OPEN_PAREN);
-	l = expression();
-	match(CLOSE_PAREN);
-    }
+	    l = expression();
+	    match(CLOSE_PAREN);
+       }
     else if(check(PRINT)){
-	l = match(PRINT);
-	match(OPEN_PAREN);
+	    l = match(PRINT);
+	    match(OPEN_PAREN);
         r = printstatement();
-	match(CLOSE_PAREN);
+	    match(CLOSE_PAREN);
     }
     else if(check(RETURN)){
-	l = match(RETURN);
-	r = expression();
+	    l = match(RETURN);
+	    r = expression();
     }
     else if(check(BREAK)) l = match(BREAK);
     else if(prefix_pending()){
         l = prefix();
-	r = unary();
+	    r = unary();
     }
     else l = match(CONTINUE);
 
-    return construct(newLexeme("unary"), l, r);
+    return cons(UNARY, l, r);
 
 }
 
 int unary_pending(void){
 
-    if(check(INTEGER_) || check(REAL_) || check(STRING_) || check(VARIABLE) ||
+    if(check(INTEGER) || check(REAL) || check(STRING) || check(VARIABLE) ||
        check(OPEN_PAREN) || check(PRINT) || check(RETURN) || check(BREAK) ||
        check(CONTINUE) || prefix_pending()) return TRUE;
     else return FALSE;

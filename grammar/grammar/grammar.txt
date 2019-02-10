@@ -78,7 +78,7 @@ statement : expression SEMI_COLON
           | whilestate
 
 vardef : VAR VARIABLE ASSIGN expression SEMI_COLON
-       | VAR VARIABLE
+       | VAR VARIABLE SEMI_COLON
 
 funcdef : DEFINE VARIABLE OPEN_PAREN parameterlist CLOSE_PAREN block
         | DEFINE VARIABLE SEMI_COLON

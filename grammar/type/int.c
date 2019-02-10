@@ -26,7 +26,7 @@
 /*                                                                           */
 /*****************************************************************************/
 
-struct INTEGER{
+struct Integer_Type{
 
     int value;
 
@@ -36,9 +36,9 @@ struct INTEGER{
 //none
 
 /*** PUBLIC METHODS ***/
-integer *newInteger(int value){
+integer_t *newInteger(int value){
 
-    integer *i = malloc(sizeof(integer));
+    integer_t *i = malloc(sizeof(integer_t));
     if(i == 0){
         fprintf(stderr, "Failure to allocate memory.\n");
         exit(1);
@@ -49,8 +49,8 @@ integer *newInteger(int value){
 
     }
 
-int getInteger(integer *i){return i->value;}
-int setInteger(integer *i, int value){
+int getInteger(integer_t *i){return i->value;}
+int setInteger(integer_t *i, int value){
 
     int old = i->value;
     i->value = value;
@@ -61,15 +61,15 @@ int setInteger(integer *i, int value){
 
 void printInteger(FILE *fp, void *i){
 
-    integer *x = (integer *)i;
+    integer_t *x = (integer_t *)i;
     fprintf(fp, "%d", x->value);
 
     }
 
 int compareInteger(void *a, void *b){
 
-    integer *alpha = (integer *)a;
-    integer *beta = (integer *)b;
+    integer_t *alpha = (integer_t *)a;
+    integer_t *beta = (integer_t *)b;
     return alpha->value - beta->value;
 
     }

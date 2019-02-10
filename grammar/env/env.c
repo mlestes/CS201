@@ -39,16 +39,12 @@
 #define TRUE 1
 #define FALSE 0
 
+
 /*** PRIVATE FUNCTION DECLARATIONS ***/
-lexeme_t *cons(char *, lexeme_t *, lexeme_t *);
-lexeme_t *car(lexeme_t *);
-lexeme_t *cdr(lexeme_t *);
-void setCar(lexeme_t *, lexeme_t *);
-void setCdr(lexeme_t *, lexeme_t *);
 int same(lexeme_t *, lexeme_t *);
 
 /*** PUBLIC FUNCTION DEFINITONS ***/
-lexeme_t *newEnv(void){return cons("ENV", NULL, cons("VALUE", NULL, NULL));}
+lexeme_t *newEnv(void){return cons(ENV, NULL, cons(VALUE, NULL, NULL));}
 lexeme_t *lookup(lexeme_t *var, lexeme_t *env){
 
     while(env){
@@ -96,14 +92,14 @@ lexeme_t *update(lexeme_t *var, lexeme_t *val, lexeme_t *env){
 
 lexeme_t *insert(lexeme_t *var, lexeme_t *val, lexeme_t *env){
 
-    setCar(cons("JOIN", var, car(env)), env);
-    setCar(cons("JOIN", val, car(cdr(env))), cdr(env));
+    setCar(cons(JOIN, var, car(env)), env);
+    setCar(cons(JOIN, val, car(cdr(env))), cdr(env));
 
     return car(env);
 }
 
 lexeme_t *extend(lexeme_t *var, lexeme_t *val, lexeme_t *env){
-    return cons("ENV", var, cons("ENV", val, env));
+    return cons(ENV, var, cons(ENV, val, env));
 }
 
 void print_env(FILE *fp, lexeme_t *env, int local_flag){
@@ -139,21 +135,6 @@ void print_env(FILE *fp, lexeme_t *env, int local_flag){
 
 }
 /*** PRIVATE FUNCTION DEFINITONS ***/
-lexeme_t *cons(char *type, lexeme_t *l, lexeme_t *r){
-
-    lexeme_t *c = newLexeme(NULL);
-    setLexemeType(type, c);
-    setCar(l, c);
-    setCdr(r, c);
-
-    return c;
-
-}
-
-lexeme_t *car(lexeme_t *l){return getLexemeLeft(l);}
-lexeme_t *cdr(lexeme_t *l){return getLexemeRight(l);}
-void setCar(lexeme_t *src, lexeme_t *dest){setLexemeLeft(dest, src);}
-void setCdr(lexeme_t *src, lexeme_t *dest){setLexemeRight(dest, src);}
 int same(lexeme_t *a, lexeme_t *b){
 
     if(!a || !b) return FALSE;
@@ -161,29 +142,29 @@ int same(lexeme_t *a, lexeme_t *b){
     type_t *bt = getLexemeValue(b);
     int ac = getTypeCast(at);
     int bc = getTypeCast(bt);
-    integer *ai, *bi;
-    real *ar, *br;
-    string *as, *bs;
+    integer_t *ai, *bi;
+    real_t *ar, *br;
+    string_t *as, *bs;
     if(ac == bc){
         switch(ac){
             case INT:
                 ai = getTypeValue(at);
-		bi = getTypeValue(bt);
-		if(compareInteger(ai, bi) == 0) return TRUE;
-		else return FALSE;
+		        bi = getTypeValue(bt);
+		        if(compareInteger(ai, bi) == 0) return TRUE;
+		        else return FALSE;
             case DBL:
-		ar = getTypeValue(at);
-		br = getTypeValue(bt);
-		if(compareReal(ar, br) == 0) return TRUE;
-		else return FALSE;
-	    case STR:
-		as = getTypeValue(at);
-		bs = getTypeValue(bt);
-		if(compareString(as, bs) == 0) return TRUE;
-		else return FALSE;
+		        ar = getTypeValue(at);
+		        br = getTypeValue(bt);
+		        if(compareReal(ar, br) == 0) return TRUE;
+		        else return FALSE;
+	        case STR:
+		        as = getTypeValue(at);
+		        bs = getTypeValue(bt);
+		        if(compareString(as, bs) == 0) return TRUE;
+		        else return FALSE;
             default:
-		return -1;
-	}
+		        return FALSE;
+        }
     }
     else return FALSE;
 

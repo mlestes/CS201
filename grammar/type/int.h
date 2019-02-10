@@ -3,11 +3,11 @@
 
 #include <stdio.h>
 
-typedef struct INTEGER integer;
+typedef struct Integer_Type integer_t;
 
-integer *newInteger(int);
-int getInteger(integer *);
-int setInteger(integer *, int);
+integer_t *newInteger(int);
+int getInteger(integer_t *);
+int setInteger(integer_t *, int);
 void printInteger(FILE *, void *);
 int compareInteger(void *, void *);
 

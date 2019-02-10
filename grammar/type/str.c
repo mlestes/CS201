@@ -24,7 +24,7 @@
 /*****************************************************************************/
 
 /*** STUCTURE DEFINITION ***/
-struct STRING{
+struct String_Type{
 
     char *value;
 
@@ -34,9 +34,9 @@ struct STRING{
 //none
 
 /*** PUBLIC METHODS ***/
-string *newString(char *val){
+string_t *newString(char *val){
 
-    string *str = malloc(sizeof(string));
+    string_t *str = malloc(sizeof(string_t));
     assert(str != 0);
     str->value = val;
 
@@ -44,13 +44,13 @@ string *newString(char *val){
 
     }
 
-char *getString(string *str){
+char *getString(string_t *str){
 
     return str->value;
 
     }
 
-char *setString(string *str, char *val){
+char *setString(string_t *str, char *val){
 
     char *thing = str->value;
     str->value = val;
@@ -61,16 +61,16 @@ char *setString(string *str, char *val){
 
 void printString(FILE *fp, void *str){
 
-    string *s = (string *) str;
+    string_t *s = (string_t *) str;
     fprintf(fp, "%s", s->value);
 
     }
 
-int sizeString(string *str){return strlen(str->value);}
+int sizeString(string_t *str){return strlen(str->value);}
 int compareString(void *a, void *b){
 
-    string *alpha = (string *) a;
-    string *beta = (string *) b;
+    string_t *alpha = (string_t *) a;
+    string_t *beta = (string_t *) b;
     return strcmp(alpha->value, beta->value);
 
     }

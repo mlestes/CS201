@@ -3,11 +3,11 @@
 
 #include <stdio.h>
 
-typedef struct REAL real;
+typedef struct Real_Type real_t;
 
-real *newReal(double);
-double getReal(real *);
-double setReal(real *, double);
+real_t *newReal(double);
+double getReal(real_t *);
+double setReal(real_t *, double);
 void printReal(FILE *, void *);
 int compareReal(void *, void *);
 

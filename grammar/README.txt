@@ -1,17 +1,37 @@
-Environment for ESL by Murray Estes - 20190125
--Environment performs a simple functions check for the environment module ISO
- ESL, testing all possible cases and ends with an error (checking out of scope).
+README document for ESL by Murray Estes - 20190210
+-Scanner performs a simple functions check for the lexer module.
+
+-Recognizer performs an in-depth functions check for the parser module.
+
+-Environment performs a simple functions check for the environment module, 
+ testing all possible cases and ends with an error (checking out of scope).
+
+-PP is a not-so Pretty Printer. It tests the ability to read the parse tree. It 
+ does not interact with the environment module.
+
+-To use scanner, first compile it using the make rule, then run scanner <file> 
+ on the command line.
+    your_linux_name:$ make scanner
+    your_linux_name:$ ./scanner <file_name>
 
 -To use environment, use the make rule to compile.
- Then, on the command line, use environment.
+    your_linux_name:$ make environment
+    your_linux_name:$ ./environment
 
--Example commands
-your_linux_name:$ make
-your_linux_name:$ ./environment
-//some output
+-To use recognizer, compile it with the make rule, then run recognizer <file>
+ on the command line.
+    your_linux_name:$ make recognizer
+    your_linux_name:$ ./recognizer <file_name>
 
--To run the supplied test cases, use the test rule
-your_linux_name:$ make test
+-To use pp, compile it with the make rule, then run pp <file> on the command 
+ line.
+    your_linux_name:$ make pp
+    your_linux_name:$ ./pp <file_name>
+
+-The current "make all" rule compiles pp.
+
+-To run the supplied test cases, use the run rule
+    your_linux_name:$ make run
 
 -All code written by Murray Estes (email: mlestes1@crimson.ua.edu).
 

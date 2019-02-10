@@ -8,10 +8,28 @@
 
 #include "../lex/lexeme.h"
 
+#define PROGRAM     200
+#define BLOCK       201
+#define PARAM_LIST  202
+#define STATEMENT   203
+#define STATE_LIST  204
+#define SUFFIX      205
+#define PREFIX      206
+#define LOGIC       207
+#define COMPARATOR  208
+#define OPERATOR    209
+#define PRINT_STATE 210
+#define EXPR_LIST   211
+#define EXPR        212
+#define UNARY       213
+#define FUNCDEF     214
+#define VARDEF      215
+#define STRUCTDEF   216
+
 lexeme_t *advance(void);
-lexeme_t *match(char *);
-int check(char *);
-lexeme_t *parse_error(char *);
+lexeme_t *match(int);
+int check(int);
+lexeme_t *parse_error(int);
 lexeme_t *program(void);
 int program_pending(void);
 lexeme_t *funcdef(void);
@@ -52,6 +70,5 @@ lexeme_t *expression(void);
 int expression_pending(void);
 lexeme_t *unary(void);
 int unary_pending(void);
-lexeme_t *construct(lexeme_t *, lexeme_t *, lexeme_t *);
 
 #endif

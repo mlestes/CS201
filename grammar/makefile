@@ -5,6 +5,9 @@ TEST= scanner.o recognizer.o environment.o pp.o
 all: $(OBJS) pp.o
 	gcc $(OPTS) $(OBJS) pp.o -o pp
 
+pp: $(OBJS) pp.o
+	gcc $(OPTS) $(OBJS) pp.o -o pp
+
 scanner: $(OBJS) scanner.o
 	gcc $(OPTS) lexer.o lexeme.o type.o int.o str.o real.o scanner.o -o scanner
 
@@ -69,14 +72,22 @@ envtest:
 
 recogtest:
 	-./recognizer ./test/program.esl
+	@echo
 	-./recognizer ./test/file2.esl
+	@echo
 	-./recognizer ./test/file3.esl
+	@echo
 	-./recognizer ./test/file4.esl
+	@echo
 	-./recognizer ./test/badfile.esl
 
 scantest:
 	-./scanner ./test/program.esl
+	@echo
 	-./scanner ./test/file2.esl
+	@echo
 	-./scanner ./test/file3.esl
+	@echo
 	-./scanner ./test/file4.esl
+	@echo
 	-./scanner ./test/badfile.esl
