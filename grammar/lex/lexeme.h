@@ -1,12 +1,12 @@
 /*****************************************************************************/
 /* lex.h by Murray Estes                                                     */
-/* Header file for implementing a designer language                          */
+/* Header file for implementing a lexeme class for ESL                       */
 /* Begin date: 20190117                                                      */
 /* Complete date:                                                            */
 /*****************************************************************************/
 
 #include <stdlib.h>
-#include "type.h"
+#include "../type/type.h"
 
 #ifndef __LEXEME_H__
 #define __LEXEME_H__
@@ -64,6 +64,10 @@ extern type_t *getLexemeValue(lexeme_t *);
 extern void setLexemeType(char *, lexeme_t *);
 extern void setLexemeValue(char *, lexeme_t *);
 extern void setLexemeError(char *, lexeme_t *);
+extern void setLexemeLeft(lexeme_t *, lexeme_t *);
+extern lexeme_t *getLexemeLeft(lexeme_t *);
+extern void setLexemeRight(lexeme_t *, lexeme_t *);
+extern lexeme_t *getLexemeRight(lexeme_t *);
 extern void printLexeme(FILE *, lexeme_t *);
 
 #endif

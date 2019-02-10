@@ -11,11 +11,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "parse.h"
-#include "lexeme.h"
-#include "lexer.h"
-#include "type.h"
-#include "str.h"
+#include "../parse/parse.h"
+#include "../lex/lexeme.h"
+#include "../lex/lexer.h"
+#include "../type/type.h"
 
 #define TRUE 1
 #define FALSE 0

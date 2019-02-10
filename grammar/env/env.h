@@ -7,7 +7,7 @@
 #define __ENV_H__
 
 #include <stdlib.h>
-#include "lexeme.h"
+#include "../lex/lexeme.h"
 
 lexeme_t *newEnv(void);
 lexeme_t *lookup(lexeme_t *, lexeme_t *);

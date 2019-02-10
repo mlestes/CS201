@@ -6,7 +6,7 @@
 #ifndef __PARSE_H__
 #define __PARSE_H__
 
-#include "lexeme.h"
+#include "../lex/lexeme.h"
 
 lexeme_t *advance(void);
 lexeme_t *match(char *);

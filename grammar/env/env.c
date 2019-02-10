@@ -33,11 +33,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "env.h"
-#include "type.h"
-#include "lexeme.h"
-#include "str.h"
-#include "real.h"
-#include "int.h"
+#include "../type/type.h"
+#include "../lex/lexeme.h"
 
 #define TRUE 1
 #define FALSE 0

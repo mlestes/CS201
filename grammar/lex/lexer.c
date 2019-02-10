@@ -22,6 +22,8 @@
 #define ERR_1 "Unknown token type."
 #define ERR_2 "Invalid string. Expected '\"' missing."
 
+extern int line;
+
 /*** PRIVATE FUNCTION DECLARATIONS ***/
 void skipwhitespace(FILE *);
 lexeme_t *lexString(FILE *);
@@ -125,49 +127,52 @@ lexeme_t *lex(FILE *fp){
 /*** PRIVATE FUNCTION DEFINITIONS ***/
 void skipwhitespace(FILE *fp){
 
-    char c = fgetc(fp);
-    //skip the whitespace
-    while(isspace(c)) c = fgetc(fp);
-    //skip comments
+    char c, d;
+    c = fgetc(fp);
     if(c == '/'){
-        c = fgetc(fp);
-        //single line comment
-        if(c == '/'){
-            while(c != '\n') c = fgetc(fp);
-        }
-        //multi-line comment
-        else if(c == '*'){
+        d = fgetc(fp);
+	if(d == '/'){
             c = fgetc(fp);
-            comment_loop:
-	    while(c != '*') c = fgetc(fp);
+	    while(c != '\n') c = fgetc(fp);
+	}
+	else if(d == '*'){
+            comment:
+	    while(c != '*'){
+	        if(c == '\n') line++;
+		c = fgetc(fp);
+	    }
 	    c = fgetc(fp);
-	    if(c != '/') goto comment_loop;
+	    if(c != '/') goto comment;
 	    else c = fgetc(fp);
-        }
-	//not a comment at all
-        else ungetc(c, fp);
-    }
-
-    //make sure there isn't more space
-    if(isspace(c)) skipwhitespace(fp);
-
-    //make sure there isn't more comments
-    else if(c == '/'){
-	char d = fgetc(fp);
-	if(d == '*' || d == '/'){
-            //push back the initial comment start chars
-	    ungetc(d, fp);
-            ungetc(c, fp);
-            skipwhitespace(fp);
 	}
 	else{
-            //not a comment, still push back the chars
             ungetc(d, fp);
 	    ungetc(c, fp);
-        }
+	}
+    }
+    else if(isspace(c)){
+        while(isspace(c)){
+            if(c == '\n') line++;
+	    c = fgetc(fp);
+	}
     }
 
-    //push back the char that got us out of this
+    if(c == '/'){
+        d = fgetc(fp);
+	if(d == '/' || d == '*'){
+            ungetc(d, fp);
+	    ungetc(c, fp);
+	    skipwhitespace(fp);
+	}
+        else{
+            ungetc(d, fp);
+	    ungetc(c, fp);
+	}
+    }
+    else if(isspace(c)){
+        ungetc(c, fp);
+	skipwhitespace(fp);
+    }
     else ungetc(c, fp);
 
 }
@@ -190,7 +195,9 @@ lexeme_t *lexString(FILE *fp){
     }
 
     str[i] = '\0';
-    return newLexeme(str);
+    lexeme_t *l = newLexeme(str);
+    setLexemeType(STRING_, l);
+    return l;
 
 }
 

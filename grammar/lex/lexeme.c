@@ -1,6 +1,6 @@
 /*****************************************************************************/
 // lexeme.c by Murray Estes
-// Implements a lexeme class for a custom language
+// Implements a lexeme class for ESL.
 // Begin Date: 20190117
 // Complete Date:
 /*****************************************************************************/
@@ -15,6 +15,38 @@
 //                                      lexeme object
 //     type_t *t = getLexemeValue(l);
 //
+// void setLexemeType(char *, lexeme_t *) - sets the type of an existing
+//                                          lexeme object to a different one
+//     setLexemeType("test_type", l);
+//
+// void setLexemeValue(char *, lexeme_t *) - sets the value of an existing
+//                                           lexeme object to a different one
+//     setLexemeValue("new_value", l);
+//
+// void setLexemeError(char *, lexeme_t *) - sets the error field of a lexeme
+//                                           object
+//     setLexemeError("error message", l);
+//
+// void setLexemeLeft(lexeme_t *, lexeme_t *) - sets the left pointer of a
+//                                              lexeme object
+//     setLexemeLeft(dest, src);
+//
+// lexeme_t *getLexemeLeft(lexeme_t *) - returns the left pointer of a lexeme
+//                                       object
+//     lexeme_t *l_left = getLexemeLeft(l);
+//
+// void setLexemeRight(lexeme_t *, lexeme_t *) - sets the right pointer of a
+//                                               lexeme object
+//     setLexemeRight(dest, src);
+//
+// lexeme_t *getLexemeRight(lexeme_t *) - returns the right pointer of a
+//                                        lexeme object
+//     lexeme_t *l_right = getLexemeRight(l);
+//
+// void printLexeme(FILE *, lexeme_t *) - prints the lexeme value to a 
+//                                        supplied output stream.
+//     printLexeme(l);
+//
 /*****************************************************************************/
 
 #include <stdlib.h>
@@ -22,10 +54,10 @@
 #include <string.h>
 #include <ctype.h>
 #include "lexeme.h"
-#include "type.h"
-#include "str.h"
-#include "real.h"
-#include "int.h"
+#include "../type/type.h"
+#include "../type/str.h"
+#include "../type/real.h"
+#include "../type/int.h"
 
 /*** STRUCTURE ***/
 struct Lexeme_Type{
@@ -33,6 +65,8 @@ struct Lexeme_Type{
 	char *type;
 	type_t *value;
 	char *error;
+	struct Lexeme_Type *left;
+	struct Lexeme_Type *right;
 
 };
 
@@ -44,9 +78,17 @@ int hasdot(char *);
 lexeme_t *newLexeme(char *item){
 
 	lexeme_t *l = malloc(sizeof(lexeme_t));
-	l->value = newType(item);
-	l->type = parse(item);
+	if(item){
+	    l->value = newType(item);
+	    l->type = parse(item);
+	}
+	else{
+	    l->value = 0;
+	    l->type = 0;
+	}
 	l->error = 0;
+	l->left = 0;
+	l->right = 0;
 
 	return l;
 
@@ -57,6 +99,10 @@ type_t *getLexemeValue(lexeme_t *l){return l->value;}
 void setLexemeType(char *type, lexeme_t *l){l->type = type;}
 void setLexemeValue(char *val, lexeme_t *l){l->value = newType(val);}
 void setLexemeError(char *err, lexeme_t *l){l->error = err;}
+lexeme_t *getLexemeLeft(lexeme_t *l){return l->left;}
+void setLexemeLeft(lexeme_t *l, lexeme_t *val){l->left = val;}
+lexeme_t *getLexemeRight(lexeme_t *l){return l->right;}
+void setLexemeRight(lexeme_t *l, lexeme_t *val){l->right = val;}
 void printLexeme(FILE *fp, lexeme_t *l){
 
     string *s; integer *i; real *r;
@@ -75,17 +121,14 @@ void printLexeme(FILE *fp, lexeme_t *l){
         case STR:
             s = getTypeValue(l->value);
             printString(fp, s);
-            fprintf(fp, "\t%s", l->type);
 	    break;
         case INT:
             i = getTypeValue(l->value);
 	    printInteger(fp, i);
-	    fprintf(fp, "\t%s", l->type);
 	    break;
         case DBL:
 	    r = getTypeValue(l->value);
 	    printReal(fp, r);
-	    fprintf(fp, "\t%s", l->type);
 	    break;
     }
 

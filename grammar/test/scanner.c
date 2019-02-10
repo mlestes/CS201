@@ -11,9 +11,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "lexeme.h"
-#include "lexer.h"
-#include "type.h"
+#include "../lex/lexeme.h"
+#include "../lex/lexer.h"
+#include "../type/type.h"
 
 /*** PRIVATE FUNCTION DECLARATIONS ***/
 //none

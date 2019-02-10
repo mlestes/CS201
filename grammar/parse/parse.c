@@ -12,10 +12,10 @@
 #include <stdio.h>
 #include <string.h>
 #include "parse.h"
-#include "lexeme.h"
-#include "lexer.h"
-#include "type.h"
-#include "str.h"
+#include "../lex/lexeme.h"
+#include "../lex/lexer.h"
+#include "../type/type.h"
+#include "../type/str.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -23,6 +23,7 @@
 /*** GLOBALS ***/
 extern FILE *fp;
 extern lexeme_t *current;
+extern lexeme_t *env;
 extern int line;
 
 /*** PRIVATE FUNCTION DECLARATIONS ***/

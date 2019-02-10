@@ -11,12 +11,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "env.h"
-#include "parse.h"
-#include "lexeme.h"
-#include "lexer.h"
-#include "type.h"
-#include "str.h"
+#include "../env/env.h"
+#include "../parse/parse.h"
+#include "../lex/lexeme.h"
+#include "../lex/lexer.h"
+#include "../type/type.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -57,7 +56,7 @@ FILE *file_init(int argc, char **argv){
     }
 
     //attempt to open the file
-    fp = fopen(argv[1], "r");
+    FILE *fp = fopen(argv[1], "r");
     if(!fp){ //attempt failed
         fprintf(stderr, "Error: could not open file \"%s\".\n"
 			"File either missing or spelled incorrectly.\n", 
@@ -76,7 +75,7 @@ FILE *file_init(int argc, char **argv){
     }
 
     return fp;
-    
+
 }
 
 void glb_init(int argc, char **argv){

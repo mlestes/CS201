@@ -10,6 +10,10 @@
 #ifndef __TYPE_H__
 #define __TYPE_H__
 
+#include "str.h"
+#include "int.h"
+#include "real.h"
+
 typedef struct Type_type type_t;
 
 #define INT 0
