@@ -15,6 +15,9 @@
 #include "../lex/lexer.h"
 #include "../type/type.h"
 
+/*** GLOBALS ***/
+int line = 0;
+
 /*** PRIVATE FUNCTION DECLARATIONS ***/
 //none
 
