@@ -111,11 +111,13 @@ lexeme_t *extend(lexeme_t *var, lexeme_t *val, lexeme_t *env){
 
 void print_env(FILE *fp, lexeme_t *env, int local_flag){
     
+    int env_lvl = 0;
     if(local_flag == TRUE) fprintf(fp, "The local environment is...\n");
     else fprintf(fp, "The full environment is...\n");
     while(env){
         lexeme_t *vars = car(env);
 	    lexeme_t *val = car(cdr(env));
+        if(local_flag == FALSE) fprintf(fp, "Environment: %d\n", env_lvl++);
         if(car(vars) == NULL){
             fprintf(fp, "void\n");
             env = cdr(cdr(env));
