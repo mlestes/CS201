@@ -11,7 +11,7 @@ scanner: $(OBJS) scanner.o
 recognizer: $(OBJS) recognizer.o
 	gcc $(OPTS) $(OBJS) recognizer.o -o recognizer
 
-environment: lexeme.o type.o int.o real.o str.o environment.o
+environment: lexeme.o type.o int.o real.o str.o env.o environment.o
 	gcc $(OPTS) lexeme.o type.o int.o real.o str.o env.o environment.o -o environment
 
 scanner.o: ./lex/lexer.h ./lex/lexeme.h ./type/type.h ./test/scanner.c
