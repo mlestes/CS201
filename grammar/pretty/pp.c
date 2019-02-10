@@ -24,13 +24,30 @@
 /*** GLOBALS ***/
 FILE *fp;
 lexeme_t *current;
+lexeme_t *env;
 int line = 1;
 
 /*** PRIVATE FUNCTION DECLARATIONS ***/
-//none
+FILE *file_init(int, char **);
+void glb_init(int, char **);
 
 /*** MAIN/PUBLIC FUNCTION DEFINITITIONS ***/
 int main(int argc, char **argv){
+
+    glb_init(argc, argv);
+
+    //read the source code, stopping at either EOF or error
+    program();
+    match(END_READ);
+    fprintf(stdout, "Parse complete. No errors.\n");
+    fclose(fp);
+
+    return 0;
+
+}
+
+/*** PRIVATE FUNCTION DEFINITIONS ***/
+FILE *file_init(int argc, char **argv){
 
     //check for correct number of inputs
     if(argc < 2){ //too few inputs
@@ -58,16 +75,14 @@ int main(int argc, char **argv){
 	exit(-1);
     }
 
-    //read the source code, stopping at either EOF or error
-    current = lex(fp);
-    program();
-    match(END_READ);
-    fprintf(stdout, "Parse complete. No errors.\n");
-    fclose(fp);
-
-    return 0;
-
+    return fp;
+    
 }
 
-/*** PRIVATE FUNCTION DEFINITIONS ***/
-//none
+void glb_init(int argc, char **argv){
+
+    fp = file_init(argc, argv);
+    env = newEnv();
+    current = lex(fp);
+
+}
