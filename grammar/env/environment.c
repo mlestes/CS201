@@ -68,7 +68,7 @@ int main(void){
     printf("\n");
 
 //case: creating another local environment, not accessible from the first
-    printf("Extending the environment...\n");
+    printf("Extending the global environment...\n");
     lexeme_t *env2 = extend(newLexeme("non"), newLexeme(NULL), env);
     printf("Extension complete!\n");
 
