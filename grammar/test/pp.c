@@ -90,10 +90,45 @@ void glb_init(int argc, char **argv){
 void print_tree(lexeme_t *tree, int level){
 
     if(!tree) return;
+    int i;
+    int type = getLexemeType(tree);
+    switch(type){
+        case IF:
+        for(i = 0; i < level; i++) printf("    "); 
+        printf("IF\n");
+        break;
+        case ELSE:
+        for(i = 0; i < level; i++) printf("    "); 
+        printf("ELSE\n");
+        break;
+        case BLOCK:
+        for(i = 0; i < level; i++) printf("    "); 
+        printf("BEGIN\n");
+        level++;
+        break;
+        case DEFINE:
+        for(i = 0; i < level; i++) printf("    "); 
+        printf("DEFINE\n");
+        break;
+        case STRUCT:
+        for(i = 0; i < level; i++) printf("    "); 
+        printf("STRUCT\n");
+        break;
+        case VAR:
+        for(i = 0; i < level; i++) printf("    ");
+        printf("VAR\n");
+        break;
+    }
     if(getLexemeLeft(tree)) print_tree(getLexemeLeft(tree), level);
     if(getLexemeRight(tree)) print_tree(getLexemeRight(tree), level);
     if(getLexemeValue(tree)) {
+        for(i = 0; i < level; i++) printf("    ");
         printLexeme(stdout, tree);
         printf("\n");
+    }
+    if(type == BLOCK){
+        level--;
+        for(i = 0; i < level; i++) printf("    ");
+        printf("END\n\n");
     }
 }

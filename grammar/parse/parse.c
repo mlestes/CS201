@@ -379,7 +379,7 @@ lexeme_t *ifstate(void){
     if(elsestate_pending()) r2 = elsestate();
     else r2 = NULL;
 
-    return cons(IF, l, cons(IF, r1, r2));
+    return cons(IF, l, cons(JOIN, r1, r2));
 
 }
 

@@ -97,28 +97,33 @@ int parseToken(void *item){
     int i;
     for(i = 0; i < size; i++){
         if(isalpha(token[i])){
-	    isreal = 0;
-	    isint = 0;
-	    break;
-	}
-	else if(!isdigit(token[i])){
+		    isreal = 0;
+	    	isint = 0;
+	    	break;
+		}
+		else if(token[i] == '.' && size == 1){
+			isint = 0;
+			isreal = 0;
+			break;
+		}
+		else if(!isdigit(token[i])){
             if(token[i] == '.' && dot == 1){ 
-		isreal = 0;
-		isint = 0;
-		break;
-	    }
-            else if(token[i] == '.') dot = 1;
-	    else if(i == 0 && token[i] != '-'){
+				isreal = 0;
+				isint = 0;
+				break;
+	    	}
+        	else if(token[i] == '.') dot = 1;
+	    	else if(i == 0 && token[i] != '-'){
                 isreal = 0;
-	        isint = 0;
-		break;
-            }
-	    else{
-	        isreal = 0;
-		isint = 0;
-		break;
-	    }
-	}
+	    	    isint = 0;
+				break;
+        	}
+	    	else{
+	        	isreal = 0;
+				isint = 0;
+				break;
+	    	}
+		}
     }
     if(dot) isint = 0;
     else isreal = 0;

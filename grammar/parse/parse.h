@@ -8,6 +8,7 @@
 
 #include "../lex/lexeme.h"
 
+#define JOIN        -1
 #define PROGRAM     200
 #define BLOCK       201
 #define PARAM_LIST  202

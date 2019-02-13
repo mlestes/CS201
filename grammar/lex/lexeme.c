@@ -89,7 +89,7 @@ lexeme_t *newLexeme(char *item){
 	l->error = 0;
 	l->left = 0;
 	l->right = 0;
-
+	
 	return l;
 
 }
