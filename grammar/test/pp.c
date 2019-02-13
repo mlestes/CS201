@@ -118,6 +118,10 @@ void print_tree(lexeme_t *tree, int level){
         for(i = 0; i < level; i++) printf("    ");
         printf("VAR\n");
         break;
+        case WHILE:
+        for(i = 0; i < level; i++) printf("    ");
+        printf("WHILE\n");
+        break;
     }
     if(getLexemeLeft(tree)) print_tree(getLexemeLeft(tree), level);
     if(getLexemeRight(tree)) print_tree(getLexemeRight(tree), level);
