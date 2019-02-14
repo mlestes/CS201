@@ -1,6 +1,5 @@
 OPTS= -Wall -Wextra -g
 OBJS= env.o lexer.o parse.o type.o lexeme.o int.o real.o str.o
-TEST= scanner.o recognizer.o environment.o pp.o
 
 all: $(OBJS) pp.o
 	gcc $(OPTS) $(OBJS) pp.o -o pp
@@ -54,7 +53,52 @@ str.o: ./type/str.h ./type/str.c
 	gcc $(OPTS) -c ./type/str.c
 
 clean:
-	rm -f *.o pp environment recognizer scanner
+	rm -f *.o output* pp environment recognizer scanner
+
+test: test1 test2 test3
+
+test1:
+	@echo "Pretty Printer test 1:"
+	@rm -f output_test1.esl output2_test1.esl
+	@touch output_test1.esl
+	@echo "Pretty Printing program.esl"
+	./pp ./test/program.esl >> output_test1.esl
+	@touch output2_test1.esl
+	@echo "Pretty Printing the output from the first pretty print"
+	./pp ./output_test1.esl >> output2_test1.esl
+	@diff -s -q output_test1.esl output2_test1.esl
+	@echo "Displaying output:"
+	@cat output_test1.esl
+	@echo
+
+test2:
+	@echo "Pretty Printer test 2:"
+	@rm -f output_test2.esl output2_test2.esl
+	@touch output_test2.esl
+	@echo "Pretty Printing file2.esl"
+	./pp ./test/file2.esl >> output_test2.esl
+	@touch output2_test2.esl
+	@echo "Pretty Printing the output the the first pretty print"
+	./pp ./output_test2.esl >> output2_test2.esl
+	@diff -s -q output_test2.esl output2_test2.esl
+	@echo "Displaying output:"
+	@cat output_test2.esl
+	@echo
+
+test3:
+	@echo "Pretty Printer test 3:"
+	@rm -f output_test3.esl output2_test3.esl
+	@touch output_test3.esl
+	@echo "Pretty Printing blank.esl"
+	./pp ./test/blank.esl >> output_test3.esl
+	@touch output2_test3.esl
+	@echo "Pretty Printing the output of the first pretty print"
+	./pp ./output_test3.esl >> output2_test3.esl
+	@diff -s -q output_test3.esl output2_test3.esl
+	@echo "Displaying output:"
+	@cat output_test3.esl
+	@echo
+
 
 run:
 	@echo "pretty printing program.esl"

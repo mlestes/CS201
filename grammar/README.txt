@@ -1,4 +1,5 @@
-README document for ESL by Murray Estes - 20190210
+README document for ESL by Murray Estes - 20190213
+
 -Scanner performs a simple functions check for the lexer module.
 
 -Recognizer performs an in-depth functions check for the parser module.
@@ -30,8 +31,22 @@ README document for ESL by Murray Estes - 20190210
 
 -The current "make all" rule compiles pp.
 
--To run the supplied test cases, use the run rule
+-To run the supplied, simple test cases, use the run rule. This tests pp using
+ program.esl, file2.esl and badfile.esl (which intentionally causes an error)
     your_linux_name:$ make run
+
+-To run the more indepth tests, use the test rule
+    your_linux_name:$ make test
+
+-Test 1 is the original program.txt file used to demonstrate the idea for how
+ the language is supposed to look. The program is correct in all ways that the
+ current implementation can determine.
+
+-Test 2 is file2.esl. It primarily tests the lexer module's ability to sift 
+ through whitespace and comments accurately.
+
+-Test 3 is a blank file. While not practical, it demonstrates that the printer
+ and parser modules at minimum handle an empty parse tree gracefully.
 
 -All code written by Murray Estes (email: mlestes1@crimson.ua.edu).
 

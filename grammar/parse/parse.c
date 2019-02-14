@@ -172,7 +172,7 @@ lexeme_t *program(void){
     if(funcdef_pending()) l = funcdef();
     else if(vardef_pending()) l = vardef();
     else if(structdef_pending()) l = structdef();
-
+    else l = NULL; //either blank file or invalid file
     if(program_pending()) r = program();
     else r = NULL;
 
@@ -278,6 +278,7 @@ lexeme_t *statement(void){
     }
     else if(vardef_pending()){
         l = vardef();
+	    //match(SEMI_COLON);
     }
     else if(funcdef_pending()) l = funcdef();
     else if(ifstate_pending()) l = ifstate();
@@ -507,7 +508,7 @@ lexeme_t *printstatement(void){
     if(printstatement_pending()) r = printstatement();
     else r = NULL;
 
-    return cons(PRINT, l, r);
+    return cons(PRINT_STATE, l, r);
 
 }
 

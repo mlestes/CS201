@@ -30,6 +30,7 @@ int line = 1;
 FILE *file_init(int, char **);
 void glb_init(int, char **);
 void print_tree(lexeme_t *, int);
+void indent(int);
 
 /*** MAIN/PUBLIC FUNCTION DEFINITITIONS ***/
 int main(int argc, char **argv){
@@ -90,49 +91,150 @@ void glb_init(int argc, char **argv){
 void print_tree(lexeme_t *tree, int level){
 
     if(!tree) return;
-    int i;
     int type = getLexemeType(tree);
+    static int do_print = 0;
     switch(type){
         case IF:
-        for(i = 0; i < level; i++) printf("    "); 
+        indent(level);
         printf("IF\n");
+        indent(level);
+        printf("(\n");
         break;
+        
         case ELSE:
-        for(i = 0; i < level; i++) printf("    "); 
+        indent(level);
         printf("ELSE\n");
         break;
+        
         case BLOCK:
-        for(i = 0; i < level; i++) printf("    "); 
+        indent(level);
         printf("BEGIN\n");
         level++;
         break;
+        
         case DEFINE:
-        for(i = 0; i < level; i++) printf("    "); 
+        indent(level);
         printf("DEFINE\n");
         break;
+        
         case STRUCT:
-        for(i = 0; i < level; i++) printf("    "); 
+        indent(level);
         printf("STRUCT\n");
         break;
+        
         case VAR:
-        for(i = 0; i < level; i++) printf("    ");
+        indent(level);
         printf("VAR\n");
         break;
+        
         case WHILE:
-        for(i = 0; i < level; i++) printf("    ");
+        indent(level);
         printf("WHILE\n");
+        indent(level);
+        printf("(\n");
         break;
+
+        case PRINT_STATE:
+        if(!do_print){
+            indent(level);
+            printf("(\n");
+            ++do_print;
+        }
+        break;
+
     }
     if(getLexemeLeft(tree)) print_tree(getLexemeLeft(tree), level);
+    switch(type){
+        case DEFINE:
+        indent(level);
+        printf("(\n");
+        if(!car(cdr(tree))){
+            indent(level);
+            printf(")\n");
+        }
+        break;
+
+        case VAR:
+        if(cdr(tree)){
+            indent(level);
+            printf("=\n");
+        }
+        break;
+
+        case IF:
+        indent(level);
+        printf(")\n");
+        break;
+
+        case UNARY:
+        if(cdr(tree) && getLexemeType(cdr(tree)) == EXPR_LIST){
+            indent(level);
+            printf("(\n");
+        }
+        break;
+        
+        case WHILE:
+        indent(level);
+        printf(")\n");
+        break;
+
+    }
     if(getLexemeRight(tree)) print_tree(getLexemeRight(tree), level);
     if(getLexemeValue(tree)) {
-        for(i = 0; i < level; i++) printf("    ");
+        indent(level);
+        if(getLexemeType(tree) == STRING) printf("\"");
         printLexeme(stdout, tree);
+        if(getLexemeType(tree) == STRING) printf("\"");
         printf("\n");
     }
-    if(type == BLOCK){
+    switch (type){
+        case BLOCK:
         level--;
-        for(i = 0; i < level; i++) printf("    ");
+        indent(level);
         printf("END\n\n");
+        break;
+        
+        case PARAM_LIST:
+        if(!cdr(tree)){
+            indent(level);
+            printf(")\n");
+        }
+        break;
+
+        case STATEMENT:
+        if(getLexemeType(car(tree)) == EXPR){
+            indent(level);
+            printf(";\n");
+        }
+        break;
+
+        case UNARY:
+        if(cdr(tree) && getLexemeType(cdr(tree)) == EXPR_LIST){
+            indent(level);
+            printf(")\n");
+        }
+        break;
+
+        case PRINT_STATE:
+        if(!(cdr(tree))){
+            indent(level);
+            printf(")\n");
+            --do_print;
+        }
+        break;
+
+        case VAR:
+        indent(level);
+        printf(";\n");
+        break;
+
     }
+
+}
+
+void indent(int n){
+
+    int i;
+    for(i = 0; i < n; i++) printf("    ");
+
 }
