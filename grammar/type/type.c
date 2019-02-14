@@ -84,7 +84,27 @@ void *getTypeValue(type_t *t){
 }
 
 int getTypeCast(type_t *t){return t->cast;}
+void printType(FILE *fp, type_t *t){
 
+	switch (t->cast)
+	{
+		case INT:
+			printInteger(fp, getTypeValue(t));
+			break;
+		
+		case DBL:
+			printReal(fp, getTypeValue(t));
+			break;
+		
+		case STR:
+			printString(fp, getTypeValue(t));
+			break;
+	
+		default:
+			break;
+	}
+
+}
 /*** PRIVATE FUNCTION DEFINITIONS ***/
 //parse token by char to determine type
 int parseToken(void *item){

@@ -23,5 +23,6 @@ typedef struct Type_type type_t;
 type_t *newType(void *);
 void *getTypeValue(type_t *);
 int getTypeCast(type_t *);
+void printType(FILE *, type_t *);
 
 #endif

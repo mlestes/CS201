@@ -105,7 +105,6 @@ lexeme_t *getLexemeRight(lexeme_t *l){return l->right;}
 void setLexemeRight(lexeme_t *l, lexeme_t *val){l->right = val;}
 void printLexeme(FILE *fp, lexeme_t *l){
 
-    string_t *s; integer_t *i; real_t *r;
     //handle error type first
     if(l->type == ERROR){
         string_t *e = getTypeValue(l->value);
@@ -116,21 +115,7 @@ void printLexeme(FILE *fp, lexeme_t *l){
     }
 
     //normal type now
-    int t = getTypeCast(l->value);
-    switch(t){
-        case STR:
-            s = getTypeValue(l->value);
-            printString(fp, s);
-	    break;
-        case INT:
-            i = getTypeValue(l->value);
-	    printInteger(fp, i);
-	    break;
-        case DBL:
-	    r = getTypeValue(l->value);
-	    printReal(fp, r);
-	    break;
-    }
+	printType(fp, getLexemeValue(l));
 
 }
 
