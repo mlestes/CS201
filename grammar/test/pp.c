@@ -95,10 +95,7 @@ void print_tree(lexeme_t *tree, int level){
     static int do_print = 0;
     switch(type){
         case IF:
-        //indent(level);
-        printf("IF");
-        //indent(level);
-        printf("(");
+        printf("IF (");
         break;
         
         case ELSE:
@@ -124,20 +121,16 @@ void print_tree(lexeme_t *tree, int level){
         break;
         
         case VAR:
-        //indent(level);
         printf("VAR ");
         break;
         
         case WHILE:
-        //indent(level);
         printf("WHILE");
-        //indent(level);
         printf("(");
         break;
 
         case PRINT_STATE:
         if(!do_print){
-            //indent(level);
             printf("(");
             ++do_print;
         }
@@ -151,42 +144,36 @@ void print_tree(lexeme_t *tree, int level){
     if(getLexemeLeft(tree)) print_tree(getLexemeLeft(tree), level);
     switch(type){
         case DEFINE:
-        //indent(level);
         printf("(");
         if(!car(cdr(tree))){
             indent(level);
-            printf(")");
+            printf(" )");
         }
         break;
 
         case VAR:
         if(cdr(tree)){
-            //indent(level);
             printf("= ");
         }
         break;
 
         case IF:
-        //indent(level);
         printf(")");
         break;
 
         case UNARY:
         if(cdr(tree) && getLexemeType(cdr(tree)) == EXPR_LIST){
-            //indent(level);
             printf("(");
         }
         break;
         
         case WHILE:
-        //indent(level);
         printf(")");
         break;
 
     }
     if(getLexemeRight(tree)) print_tree(getLexemeRight(tree), level);
     if(getLexemeValue(tree)) {
-        //indent(level);
         if(getLexemeType(tree) == STRING) printf("\"");
         printLexeme(stdout, tree);
         if(getLexemeType(tree) == STRING) printf("\"");
@@ -201,35 +188,30 @@ void print_tree(lexeme_t *tree, int level){
         
         case PARAM_LIST:
         if(!cdr(tree)){
-            //indent(level);
             printf(")");
         }
         break;
 
         case STATEMENT:
         if(getLexemeType(car(tree)) == EXPR){
-            //indent(level);
             printf(";\n");
         }
         break;
 
         case UNARY:
         if(cdr(tree) && getLexemeType(cdr(tree)) == EXPR_LIST){
-            //indent(level);
             printf(")");
         }
         break;
 
         case PRINT_STATE:
         if(!(cdr(tree))){
-            //indent(level);
             printf(")");
             --do_print;
         }
         break;
 
         case VAR:
-        //indent(level);
         printf(";\n");
         break;
 
