@@ -107,8 +107,8 @@ run:
 	@echo "pretty printing file2.esl"
 	-./pp ./test/file2.esl
 	@echo
-	@echo "Pretty printing badfile.esl - expect an error"
-	-./pp ./test/badfile.esl
+	@echo "Pretty printing blank.esl"
+	-./pp ./test/blank.esl
 	@echo
 
 envtest:
