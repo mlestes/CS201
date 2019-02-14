@@ -111,7 +111,6 @@ void print_tree(lexeme_t *tree, int level){
         break;
         
         case DEFINE:
-        indent(level);
         printf("DEFINE ");
         break;
         
