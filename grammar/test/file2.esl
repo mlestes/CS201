@@ -21,3 +21,10 @@ BEGIN
     VAR z = y % 3 ? foo() : bar(&y);
     RETURN z - 1;
 END
+
+DEFINE foo_bar(par1 par2)
+BEGIN
+    VAR x = par1 / 2;
+    VAR y = par2 % 4;
+    RETURN x + y;
+END

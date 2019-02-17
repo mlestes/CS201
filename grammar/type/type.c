@@ -24,6 +24,7 @@
 #include "int.h"
 #include "real.h"
 #include "str.h"
+#include "arr.h"
 
 /*** STRUCTRES ***/
 struct Type_type{
@@ -32,33 +33,41 @@ struct Type_type{
     integer_t *ival;
     real_t *rval;
     string_t *sval;
+	array_t *aval;
 
 };
 
 /*** PRIVATE FUNCTION DECLARATIONS ***/
-int parseToken(void *);
+//none
 
 /*** PUBLIC/MAIN FUNCTION DEFINITIONS ***/
-type_t *newType(void *item){
+type_t *newType(void *item, int type){
 
-    char *str = (char *) item;
-    int parsed = parseToken(item);
+    char *str;
     type_t *t = malloc(sizeof(type_t));
-    switch (parsed){
+    switch (type){
         case INT:
             t->cast = INT;
+			str = (char *) item;
 	    	int i = atoi(str);
 	    	t->ival = newInteger(i);
 	    	break;
 		case DBL:
 	    	t->cast = DBL;
+			str = (char *) item;
 	    	double r = atof(str);
 	    	t->rval = newReal(r);
 	    	break;
 		case STR:
 		    t->cast = STR;
+			str = (char *) item;
 		    t->sval = newString(str);
 	    	break;
+		case ARR:
+			t->cast = ARR;
+			t->aval = new_array(printType);
+			break;
+
     }
 
     return t;
@@ -68,36 +77,36 @@ type_t *newType(void *item){
 void *getTypeValue(type_t *t){
 
     switch (t->cast){
-        case INT:   
-	    return t->ival;
-	    break;
-	case DBL:
-	    return t->rval;
-	    break;
-	case STR:
-	    return t->sval;
-	    break;
-        default:
-            return "Error";
+        case INT: return t->ival;
+		case DBL: return t->rval;
+		case STR: return t->sval;
+		case ARR: return t->aval;
+    	default:  return "Error";
+
     }
 
 }
 
 int getTypeCast(type_t *t){return t->cast;}
-void printType(FILE *fp, type_t *t){
+void printType(FILE *fp, void *item){
 
+	type_t *t = (type_t *) item;
 	switch (t->cast)
 	{
 		case INT:
-			printInteger(fp, getTypeValue(t));
+			printInteger(fp, t->ival);
 			break;
 		
 		case DBL:
-			printReal(fp, getTypeValue(t));
+			printReal(fp, t->rval);
 			break;
 		
 		case STR:
-			printString(fp, getTypeValue(t));
+			printString(fp, t->sval);
+			break;
+		
+		case ARR:
+			print_array(fp, t->aval);
 			break;
 	
 		default:
@@ -106,51 +115,4 @@ void printType(FILE *fp, type_t *t){
 
 }
 /*** PRIVATE FUNCTION DEFINITIONS ***/
-//parse token by char to determine type
-int parseToken(void *item){
-
-    char *token = (char *) item;
-    int isint = 1;
-    int isreal = 1;
-    int dot = 0;
-    int size = strlen(token);
-    int i;
-    for(i = 0; i < size; i++){
-        if(isalpha(token[i])){
-		    isreal = 0;
-	    	isint = 0;
-	    	break;
-		}
-		else if(token[i] == '.' && size == 1){
-			isint = 0;
-			isreal = 0;
-			break;
-		}
-		else if(!isdigit(token[i])){
-            if(token[i] == '.' && dot == 1){ 
-				isreal = 0;
-				isint = 0;
-				break;
-	    	}
-        	else if(token[i] == '.') dot = 1;
-	    	else if(i == 0 && token[i] != '-'){
-                isreal = 0;
-	    	    isint = 0;
-				break;
-        	}
-	    	else{
-	        	isreal = 0;
-				isint = 0;
-				break;
-	    	}
-		}
-    }
-    if(dot) isint = 0;
-    else isreal = 0;
-
-    if(isint) return INT;
-    else if(isreal) return DBL;
-    else return STR;
-
-}
-
+//none

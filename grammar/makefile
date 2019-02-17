@@ -1,5 +1,5 @@
 OPTS= -Wall -Wextra -g
-OBJS= env.o lexer.o parse.o type.o lexeme.o int.o real.o str.o
+OBJS= env.o lexer.o parse.o type.o lexeme.o int.o real.o str.o arr.o
 
 all: $(OBJS) pp.o
 	gcc $(OPTS) $(OBJS) pp.o -o pp
@@ -37,7 +37,7 @@ lexer.o: ./lex/lexer.h ./lex/lexeme.h ./lex/lexer.c
 parse.o: ./parse/parse.h ./lex/lexer.h ./lex/lexeme.h ./type/type.h ./type/str.h ./parse/parse.c
 	gcc $(OPTS) -c ./parse/parse.c
 
-type.o: ./type/type.h ./type/int.h ./type/real.h ./type/str.h ./type/type.c
+type.o: ./type/type.h ./type/int.h ./type/real.h ./type/str.h ./type/arr.h ./type/type.c
 	gcc $(OPTS) -c ./type/type.c
 
 lexeme.o: ./lex/lexeme.h ./type/int.h ./type/real.h ./type/str.h ./type/type.h ./lex/lexeme.c
@@ -51,6 +51,9 @@ real.o: ./type/real.h ./type/real.c
 
 str.o: ./type/str.h ./type/str.c
 	gcc $(OPTS) -c ./type/str.c
+
+arr.o: ./type/arr.h ./type/arr.c
+	gcc $(OPTS) -c ./type/arr.c
 
 clean:
 	rm -f *.o output* pp environment recognizer scanner

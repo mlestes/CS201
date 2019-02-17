@@ -16,6 +16,7 @@
 #define INTEGER             0
 #define REAL                1
 #define STRING              2
+#define ARRAY               44
 
 //operators & general punctuation
 #define OPEN_PAREN          3   // (
@@ -65,6 +66,9 @@
 #define PRINT               41
 #define WHILE               42
 #define END_READ            43
+#define READ                45
+#define WRITE               46
+#define NEW                 47
 
 typedef struct Lexeme_Type lexeme_t;
 

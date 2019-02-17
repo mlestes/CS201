@@ -113,7 +113,7 @@ lexeme_t *lex(FILE *fp){
                 ungetc(c, fp);
                 return lexNum(fp);
             }
-            else if(isalpha(c)){
+            else if(isalpha(c) || c == '_'){
                 ungetc(c, fp);
                 return lexWord(fp);
             }
@@ -246,7 +246,7 @@ lexeme_t *lexWord(FILE *fp){
     char *str = malloc(sizeof(char));
     int i = 0;
     char c = fgetc(fp);
-    while(isalpha(c) || isdigit(c)){
+    while(isalpha(c) || isdigit(c) || c == '_'){
         str[i++] = c;
 	    if(i >= size) str = grow(str, &size);
         c = fgetc(fp);

@@ -13,16 +13,18 @@
 #include "str.h"
 #include "int.h"
 #include "real.h"
+#include "arr.h"
 
 typedef struct Type_type type_t;
 
 #define INT 0
 #define DBL 1
 #define STR 2
+#define ARR 3
 
-type_t *newType(void *);
+type_t *newType(void *, int);
 void *getTypeValue(type_t *);
 int getTypeCast(type_t *);
-void printType(FILE *, type_t *);
+void printType(FILE *, void *);
 
 #endif

@@ -79,8 +79,21 @@ lexeme_t *newLexeme(char *item){
 
 	lexeme_t *l = malloc(sizeof(lexeme_t));
 	if(item){
-	    l->value = newType(item);
 	    l->type = parse(item);
+		switch (l->type){
+			case INTEGER:
+				l->value = newType(item, INT);
+				break;
+			case REAL:
+				l->value = newType(item, DBL);
+				break;
+			case ARRAY:
+				l->value = newType(NULL, ARR);
+				break;
+			default:
+				l->value = newType(item, STR);
+				break;
+		}
 	}
 	else{
 	    l->value = 0;
@@ -94,10 +107,29 @@ lexeme_t *newLexeme(char *item){
 
 }
 
+void setLexemeValue(char *item, lexeme_t *l){
+
+	l->type = parse(item);
+	switch (l->type){
+		case INTEGER:
+			l->value = newType(newInteger(atoi(item)), INT);
+			break;
+		case REAL:
+			l->value = newType(newReal(atof(item)), DBL);
+			break;
+		case ARRAY:
+			l->value = newType(new_array(printType), ARR);
+			break;
+		default:
+			l->value = newType(newString(item), STR);
+			break;
+	}
+
+}
+
 int getLexemeType(lexeme_t *l){return l->type;}
 type_t *getLexemeValue(lexeme_t *l){return l->value;}
 void setLexemeType(int type, lexeme_t *l){l->type = type;}
-void setLexemeValue(char *val, lexeme_t *l){l->value = newType(val);}
 void setLexemeError(char *err, lexeme_t *l){l->error = err;}
 lexeme_t *getLexemeLeft(lexeme_t *l){return l->left;}
 void setLexemeLeft(lexeme_t *l, lexeme_t *val){l->left = val;}
@@ -115,7 +147,7 @@ void printLexeme(FILE *fp, lexeme_t *l){
     }
 
     //normal type now
-	printType(fp, getLexemeValue(l));
+	printType(fp, l->value);
 
 }
 
@@ -179,11 +211,13 @@ int parse(char *str){
 		    else if(strcmp(str, "XOR") == 0) return XOR;
 	    	else if(strcmp(str, "END") == 0) return END;
 	    	else if(strcmp(str, "VAR") == 0) return VAR;
+			else if(strcmp(str, "NEW") == 0) return NEW;
             else return VARIABLE;
 	    	break;
 		case 4:
 	    	if(strcmp(str, "ELSE") == 0) return ELSE;
 		    else if(strcmp(str, "STAR") == 0) return STAR;
+			else if(strcmp(str, "READ") == 0) return READ;
 		    else return VARIABLE;
 	    	break;
 		case 5:
@@ -191,6 +225,8 @@ int parse(char *str){
 		    else if(strcmp(str, "BREAK") == 0) return BREAK;
 		    else if(strcmp(str, "BEGIN") == 0) return BEGIN;
 	    	else if(strcmp(str, "PRINT") == 0) return PRINT;
+			else if(strcmp(str, "ARRAY") == 0) return ARRAY;
+			else if(strcmp(str, "WRITE") == 0) return WRITE;
 	    	else return VARIABLE;
 	    	break;
 		case 6:
