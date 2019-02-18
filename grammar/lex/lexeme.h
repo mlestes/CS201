@@ -72,21 +72,21 @@
 
 typedef struct Lexeme_Type lexeme_t;
 
-extern lexeme_t *newLexeme(char *);
-extern int getLexemeType(lexeme_t *);
-extern type_t *getLexemeValue(lexeme_t *);
-extern void setLexemeType(int, lexeme_t *);
-extern void setLexemeValue(char *, lexeme_t *);
-extern void setLexemeError(char *, lexeme_t *);
-extern void setLexemeLeft(lexeme_t *, lexeme_t *);
-extern lexeme_t *getLexemeLeft(lexeme_t *);
-extern void setLexemeRight(lexeme_t *, lexeme_t *);
-extern lexeme_t *getLexemeRight(lexeme_t *);
-extern void printLexeme(FILE *, lexeme_t *);
-extern lexeme_t *cons(int, lexeme_t *, lexeme_t *);
-extern lexeme_t *car(lexeme_t *);
-extern lexeme_t *cdr(lexeme_t *);
-extern void setCar(lexeme_t *, lexeme_t *);
-extern void setCdr(lexeme_t *, lexeme_t *);
+extern lexeme_t *newLexeme(char *item);
+extern int getLexemeType(lexeme_t *l);
+extern type_t *getLexemeValue(lexeme_t *l);
+extern void setLexemeType(int, lexeme_t *l);
+extern void setLexemeValue(char *val, lexeme_t *l);
+extern void setLexemeError(char *err, lexeme_t *l);
+extern void setLexemeLeft(lexeme_t *par, lexeme_t *child);
+extern lexeme_t *getLexemeLeft(lexeme_t *l);
+extern void setLexemeRight(lexeme_t *par, lexeme_t *child);
+extern lexeme_t *getLexemeRight(lexeme_t *l);
+extern void printLexeme(FILE *fp, void *item);
+extern lexeme_t *cons(int, lexeme_t *left, lexeme_t *right);
+extern lexeme_t *car(lexeme_t *l);
+extern lexeme_t *cdr(lexeme_t *l);
+extern void setCar(lexeme_t *src, lexeme_t *dest);
+extern void setCdr(lexeme_t *src, lexeme_t *dest);
 
 #endif

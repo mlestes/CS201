@@ -45,6 +45,10 @@ array_t *new_array(void (*d)(FILE *, void *)){
 
     array_t *arr = malloc(sizeof(array_t));
     arr->array = malloc(sizeof(void *));
+    if(!arr->array){
+        fprintf(stderr, "Error: Failed to allocate memory.\n");
+        exit(-1);
+    }
     arr->size = 0;
     arr->cap = 1;
     arr->display = d;
@@ -68,6 +72,8 @@ void print_array(FILE *fp, array_t *arr){
     for(i = 0; i < arr->size; i++) arr->display(fp, arr->array[i]);
 
 }
+int size_array(array_t *arr){return arr->size;}
+
 /*** PRIVATE FUNCTION DEFINITIONS ***/
 void grow_array(array_t *arr){
 

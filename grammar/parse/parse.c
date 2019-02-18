@@ -16,6 +16,7 @@
 #include "../lex/lexer.h"
 #include "../type/type.h"
 #include "../type/str.h"
+#include "../env/env.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -24,10 +25,11 @@
 extern FILE *fp;
 extern lexeme_t *current;
 extern lexeme_t *env;
+extern array_t *env_arr;
 extern int line;
 
 /*** PRIVATE FUNCTION DECLARATIONS ***/
-//none
+//none 
 
 /*** MAIN/PUBLIC FUNCTION DEFINITITIONS ***/
 lexeme_t *advance(void){
@@ -165,8 +167,9 @@ lexeme_t *parse_error(int type){
 
 }
 
-lexeme_t *program(void){
+lexeme_t *program(lexeme_t *loc_env){
 
+/* Comment out the original program function.
 //determine which rule to use
     lexeme_t *l; lexeme_t *r;
     if(funcdef_pending()) l = funcdef();
@@ -174,6 +177,20 @@ lexeme_t *program(void){
     else if(structdef_pending()) l = structdef();
     else l = NULL; //either blank file or invalid file
     if(program_pending()) r = program();
+    else r = NULL;
+
+    return cons(PROGRAM, l, r);
+*/
+    if(!loc_env) loc_env = env;
+    lexeme_t *l; lexeme_t *r; //left and right pointers for the parse tree
+    if(funcdef_pending()){ //extend environment
+        loc_env = extend(newLexeme("FUNCTION"), newLexeme("JOIN"), loc_env);
+        l = funcdef(loc_env);
+    }
+    else if(vardef_pending()) l = vardef(loc_env); //no extend
+    else if(structdef_pending()) l = structdef(loc_env); //no extend
+    else l = NULL; //blank file or invalid input
+    if(program_pending()) r = program(NULL);
     else r = NULL;
 
     return cons(PROGRAM, l, r);
@@ -188,8 +205,9 @@ int program_pending(void){
 
 }
 
-lexeme_t *funcdef(void){
+lexeme_t *funcdef(lexeme_t *loc_env){
 
+/* commenting out original function
     lexeme_t *l, *r1, *r2;
     match(DEFINE);
     l = match(VARIABLE);
@@ -198,6 +216,20 @@ lexeme_t *funcdef(void){
     else r1 = NULL;
     match(CLOSE_PAREN);
     r2 = block();
+
+    return cons(DEFINE, l, cons(FUNCDEF, r1, r2));
+*/
+
+    lexeme_t *l, *r1, *r2; //lexemes requried for the cons()
+    match(DEFINE);
+    l = match(VARIABLE); 
+    setLexemeValue(getString(getTypeValue(getLexemeValue(l))), loc_env);
+    insert_array(env_arr, loc_env); //keep record of the function's environment
+    match(OPEN_PAREN);
+    if(parameterlist_pending()) r1 = parameterlist(loc_env);
+    else r1 = NULL;
+    match(CLOSE_PAREN);
+    r2 = block(loc_env);
 
     return cons(DEFINE, l, cons(FUNCDEF, r1, r2));
 
@@ -210,8 +242,9 @@ int funcdef_pending(void){
 
 }
 
-lexeme_t *vardef(void){
+lexeme_t *vardef(lexeme_t *loc_env){
 
+/* commenting out original function
     lexeme_t *l, *r;
     match(VAR);
     l = match(VARIABLE);
@@ -221,6 +254,20 @@ lexeme_t *vardef(void){
     }
     else r = NULL;
     match(SEMI_COLON);
+
+    return cons(VAR, l, r);
+*/
+
+    lexeme_t *l, *r; //lexemes for var name and val
+    match(VAR);
+    l = match(VARIABLE);
+    if(check(ASSIGN)){
+        match(ASSIGN);
+        r = expression();
+    }
+    else r = NULL;
+    match(SEMI_COLON);
+    insert(l, r, loc_env); //insert the variable into the environment
 
     return cons(VAR, l, r);
 
@@ -233,12 +280,22 @@ int vardef_pending(void){
 
 }
 
-lexeme_t *structdef(void){
+lexeme_t *structdef(lexeme_t *loc_env){
 
+/* commenting out original
     lexeme_t *l; lexeme_t *r;
     match(STRUCT);
     l = match(VARIABLE);
     r = block();
+
+    return cons(STRUCT, l, r);
+*/
+
+    lexeme_t *l, *r; //lexemes for the parse tree
+    match(STRUCT);
+    l = match(VARIABLE);
+    r = block(loc_env);
+    insert(l, r, loc_env);
 
     return cons(STRUCT, l, r);
 
@@ -251,12 +308,22 @@ int structdef_pending(void){
 
 }
 
-lexeme_t *parameterlist(void){
+lexeme_t *parameterlist(lexeme_t *loc_env){
 
+/* commenting out original
     lexeme_t *l; lexeme_t *r;
     l = match(VARIABLE);
     if(parameterlist_pending()) r = parameterlist();
     else r = NULL;
+
+    return cons(PARAM_LIST, l, r);
+*/
+
+    lexeme_t *l, *r; //required for parse tree
+    l = match(VARIABLE);
+    if(parameterlist_pending()) r = parameterlist(loc_env);
+    else r = NULL;
+    insert(l, NULL, loc_env); //NULL the var has no value upon definition
 
     return cons(PARAM_LIST, l, r);
 
@@ -269,20 +336,17 @@ int parameterlist_pending(void){
 
 }
 
-lexeme_t *statement(void){
+lexeme_t *statement(lexeme_t *loc_env){
 
-    lexeme_t *l;
+    lexeme_t *l; //for parse tree
     if(expression_pending()){
         l = expression();
-	    match(SEMI_COLON);
+        match(SEMI_COLON);
     }
-    else if(vardef_pending()){
-        l = vardef();
-	    //match(SEMI_COLON);
-    }
-    else if(funcdef_pending()) l = funcdef();
-    else if(ifstate_pending()) l = ifstate();
-    else if(whilestate_pending()) l = whilestate();
+    else if(vardef_pending()) l = vardef(loc_env);
+    else if(funcdef_pending()) l = funcdef(loc_env);
+    else if(ifstate_pending()) l = ifstate(loc_env);
+    else if(whilestate_pending()) l = whilestate(loc_env);
 
     return cons(STATEMENT, l, NULL);
 
@@ -296,11 +360,11 @@ int statement_pending(void){
 
 }
 
-lexeme_t *statementlist(void){
+lexeme_t *statementlist(lexeme_t *loc_env){
 
     lexeme_t *l; lexeme_t *r;
-    l = statement();
-    if(statementlist_pending()) r = statementlist();
+    l = statement(loc_env);
+    if(statementlist_pending()) r = statementlist(loc_env);
     else r = NULL;
 
     return cons(STATE_LIST, l, r);
@@ -314,11 +378,11 @@ int statementlist_pending(void){
 
 }
 
-lexeme_t *block(void){
+lexeme_t *block(lexeme_t *loc_env){
 
     lexeme_t *l;
     match(BEGIN);
-    l = statementlist();
+    l = statementlist(loc_env);
     match(END);
 
     return cons(BLOCK, l, NULL);
@@ -332,14 +396,14 @@ int block_pending(void){
 
 }
 
-lexeme_t *whilestate(void){
+lexeme_t *whilestate(lexeme_t *loc_env){
 
     lexeme_t *l; lexeme_t *r;
     match(WHILE);
     match(OPEN_PAREN);
     l = expression();
     match(CLOSE_PAREN);
-    r = block();
+    r = block(loc_env);
 
     return cons(WHILE, l, r);
 
@@ -352,11 +416,11 @@ int whilestate_pending(void){
 
 }
 
-lexeme_t *elsestate(void){
+lexeme_t *elsestate(lexeme_t *loc_env){
 
     lexeme_t *l;
     match(ELSE);
-    l = block();
+    l = block(loc_env);
 
     return cons(ELSE, l, NULL);
 
@@ -369,15 +433,15 @@ int elsestate_pending(void){
 
 }
 
-lexeme_t *ifstate(void){
+lexeme_t *ifstate(lexeme_t *loc_env){
 
     lexeme_t *l, *r1, *r2;
     match(IF);
     match(OPEN_PAREN);
     l = expression();
     match(CLOSE_PAREN);
-    r1 = block();
-    if(elsestate_pending()) r2 = elsestate();
+    r1 = block(loc_env);
+    if(elsestate_pending()) r2 = elsestate(loc_env);
     else r2 = NULL;
 
     return cons(IF, l, cons(JOIN, r1, r2));

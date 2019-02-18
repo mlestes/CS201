@@ -28,10 +28,12 @@ array_t *env_arr;
 int line = 1;
 
 /*** PRIVATE FUNCTION DECLARATIONS ***/
-FILE *file_init(int, char **);
-void glb_init(int, char **);
-void print_tree(lexeme_t *, int);
-void indent(int);
+FILE *file_init(int argc, char **argv);
+void glb_init(int argc, char **argv);
+void print_tree(lexeme_t *, int level);
+void indent(int level);
+int eval(lexeme_t *tree, lexeme_t *loc_env);
+lexeme_t *find_env(lexeme_t *val);
 
 /*** MAIN/PUBLIC FUNCTION DEFINITITIONS ***/
 int main(int argc, char **argv){
@@ -39,9 +41,20 @@ int main(int argc, char **argv){
     glb_init(argc, argv);
 
     //read the source code, stopping at either EOF or error
-    lexeme_t *tree = program(env);
+    lexeme_t *tree = program(NULL);
     match(END_READ);
-    print_tree(tree, 0);
+    //print_tree(tree, 0);
+    eval(tree, NULL);
+    printf("The global env:\n");
+    print_env(stdout, env, FALSE);
+    printf("\n");
+    int i;
+    printf("number of env's: %d\n", size_array(env_arr));
+    for(i = 0; i < size_array(env_arr); i++){
+        printLexeme(stdout, get_array(env_arr, i)); printf("\n");
+        print_env(stdout, get_array(env_arr, i), FALSE);
+        printf("\n");
+    }
     fclose(fp);
 
     return 0;
@@ -224,5 +237,27 @@ void indent(int n){
 
     int i;
     for(i = 0; i < n; i++) printf("    ");
+
+}
+
+int eval(lexeme_t *tree, lexeme_t *loc_env){
+
+    if(!tree) return 0;
+    if(getLexemeLeft(tree)) eval(getLexemeLeft(tree), loc_env);
+    if(getLexemeRight(tree)) eval(getLexemeRight(tree), loc_env);
+    return 0;
+
+}
+
+lexeme_t *find_env(lexeme_t *val){
+
+    int i = 0;
+    while(strcmp(getString(getTypeValue(getLexemeValue(val))), 
+          getString(getTypeValue(getLexemeValue(get_array(env_arr, i))))) != 0){
+        i++;
+        if(i > size_array(env_arr)) return NULL;
+    }
+    
+    return get_array(env_arr, i);
 
 }

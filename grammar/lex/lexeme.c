@@ -112,31 +112,47 @@ void setLexemeValue(char *item, lexeme_t *l){
 	l->type = parse(item);
 	switch (l->type){
 		case INTEGER:
-			l->value = newType(newInteger(atoi(item)), INT);
+			l->value = newType(item, INT);
 			break;
 		case REAL:
-			l->value = newType(newReal(atof(item)), DBL);
+			l->value = newType(item, DBL);
 			break;
 		case ARRAY:
-			l->value = newType(new_array(printType), ARR);
+			l->value = newType(item, ARR);
 			break;
 		default:
-			l->value = newType(newString(item), STR);
+			l->value = newType(item, STR);
 			break;
 	}
 
 }
 
 int getLexemeType(lexeme_t *l){return l->type;}
-type_t *getLexemeValue(lexeme_t *l){return l->value;}
+type_t *getLexemeValue(lexeme_t *l){
+	
+	if(l) return l->value;
+	else return NULL;
+
+}
 void setLexemeType(int type, lexeme_t *l){l->type = type;}
 void setLexemeError(char *err, lexeme_t *l){l->error = err;}
-lexeme_t *getLexemeLeft(lexeme_t *l){return l->left;}
-void setLexemeLeft(lexeme_t *l, lexeme_t *val){l->left = val;}
-lexeme_t *getLexemeRight(lexeme_t *l){return l->right;}
-void setLexemeRight(lexeme_t *l, lexeme_t *val){l->right = val;}
-void printLexeme(FILE *fp, lexeme_t *l){
+lexeme_t *getLexemeLeft(lexeme_t *l){
 
+	if(l) return l->left;
+	else return NULL;
+
+}
+void setLexemeLeft(lexeme_t *l, lexeme_t *val){l->left = val;}
+lexeme_t *getLexemeRight(lexeme_t *l){
+	
+	if(l) return l->right;
+	else return NULL;
+
+}
+void setLexemeRight(lexeme_t *l, lexeme_t *val){l->right = val;}
+void printLexeme(FILE *fp, void *item){
+
+	lexeme_t *l = (lexeme_t *) item;
     //handle error type first
     if(l->type == ERROR){
         string_t *e = getTypeValue(l->value);

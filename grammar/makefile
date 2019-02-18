@@ -1,8 +1,11 @@
 OPTS= -Wall -Wextra -g
 OBJS= env.o lexer.o parse.o type.o lexeme.o int.o real.o str.o arr.o
 
-all: $(OBJS) pp.o
-	gcc $(OPTS) $(OBJS) pp.o -o pp
+all: $(OBJS) eval.o
+	gcc $(OPTS) $(OBJS) eval.o -o eval
+
+eval: $(OBJS) eval.o
+	gcc $(OPTS) $(OBJS) eval.o -o eval
 
 pp: $(OBJS) pp.o
 	gcc $(OPTS) $(OBJS) pp.o -o pp
@@ -13,8 +16,8 @@ scanner: $(OBJS) scanner.o
 recognizer: $(OBJS) recognizer.o
 	gcc $(OPTS) $(OBJS) recognizer.o -o recognizer
 
-environment: lexeme.o type.o int.o real.o str.o env.o environment.o
-	gcc $(OPTS) lexeme.o type.o int.o real.o str.o env.o environment.o -o environment
+environment: lexeme.o type.o arr.o int.o real.o str.o env.o environment.o
+	gcc $(OPTS) lexeme.o type.o arr.o int.o real.o str.o env.o environment.o -o environment
 
 scanner.o: ./lex/lexer.h ./lex/lexeme.h ./type/type.h ./test/scanner.c
 	gcc $(OPTS) -c ./test/scanner.c
@@ -24,6 +27,9 @@ recognizer.o: ./lex/lexer.h ./lex/lexeme.h ./type/type.h ./parse/parse.h ./test/
 
 environment.o: ./env/env.h ./lex/lexeme.h ./type/type.h ./parse/parse.h ./test/environment.c
 	gcc $(OPTS) -c ./test/environment.c
+
+eval.o: ./lex/lexeme.h ./lex/lexer.h ./type/type.h ./env/env.h ./parse/parse.h ./test/eval.c
+	gcc $(OPTS) -c ./test/eval.c
 
 pp.o: ./lex/lexeme.h ./type/type.h ./type/int.h ./type/real.h ./type/str.h ./test/pp.c
 	gcc $(OPTS) -c ./test/pp.c
@@ -104,16 +110,9 @@ test3:
 
 
 run:
-	@echo "pretty printing program.esl"
-	./pp ./test/program.esl
-	@echo
-	@echo "pretty printing file2.esl"
-	-./pp ./test/file2.esl
-	@echo
-	@echo "Pretty printing blank.esl"
-	-./pp ./test/blank.esl
-	@echo
-
+	@echo "Testing eval..."
+	./eval ./test/program.esl
+	
 envtest:
 	-./environment
 

@@ -5,10 +5,10 @@
 
 typedef struct Integer_Type integer_t;
 
-integer_t *newInteger(int);
-int getInteger(integer_t *);
-int setInteger(integer_t *, int);
-void printInteger(FILE *, void *);
-int compareInteger(void *, void *);
+integer_t *newInteger(int value);
+int getInteger(integer_t *i);
+int setInteger(integer_t *i, int value);
+void printInteger(FILE *fp, void *i);
+int compareInteger(void *a, void *b);
 
 #endif

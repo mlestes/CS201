@@ -9,6 +9,6 @@
 #include <stdlib.h>
 #include "lexeme.h"
 
-lexeme_t *lex(FILE *);
+lexeme_t *lex(FILE *fp);
 
 #endif

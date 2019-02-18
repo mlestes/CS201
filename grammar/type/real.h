@@ -5,10 +5,10 @@
 
 typedef struct Real_Type real_t;
 
-real_t *newReal(double);
-double getReal(real_t *);
-double setReal(real_t *, double);
-void printReal(FILE *, void *);
-int compareReal(void *, void *);
+real_t *newReal(double value);
+double getReal(real_t *r);
+double setReal(real_t *r, double value);
+void printReal(FILE *fp, void *r);
+int compareReal(void *a, void *b);
 
 #endif
