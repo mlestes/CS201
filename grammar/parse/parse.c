@@ -344,7 +344,10 @@ lexeme_t *statement(lexeme_t *loc_env){
         match(SEMI_COLON);
     }
     else if(vardef_pending()) l = vardef(loc_env);
-    else if(funcdef_pending()) l = funcdef(loc_env);
+    else if(funcdef_pending()){
+        loc_env = extend(newLexeme("FUNCTION"), newLexeme("JOIN"), loc_env);
+        l = funcdef(loc_env);
+    }
     else if(ifstate_pending()) l = ifstate(loc_env);
     else if(whilestate_pending()) l = whilestate(loc_env);
 

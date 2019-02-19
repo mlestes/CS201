@@ -62,7 +62,7 @@ arr.o: ./type/arr.h ./type/arr.c
 	gcc $(OPTS) -c ./type/arr.c
 
 clean:
-	rm -f *.o output* pp environment recognizer scanner
+	rm -f *.o output* eval pp environment recognizer scanner
 
 test: test1 test2 test3
 
