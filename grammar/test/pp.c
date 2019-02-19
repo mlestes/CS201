@@ -141,6 +141,11 @@ void print_tree(lexeme_t *tree, int level){
         indent(level);
         break;
 
+        case UNARY:
+        if(getLexemeType(getLexemeLeft(tree)) == EXPR)
+        printf("(");
+        break;
+
     }
     if(getLexemeLeft(tree)) print_tree(getLexemeLeft(tree), level);
     switch(type){
@@ -161,13 +166,13 @@ void print_tree(lexeme_t *tree, int level){
         case IF:
         printf(")");
         break;
-
+/*
         case UNARY:
         if(cdr(tree) && getLexemeType(cdr(tree)) == EXPR_LIST){
             printf("(");
         }
         break;
-        
+*/      
         case WHILE:
         printf(")");
         break;
@@ -198,11 +203,16 @@ void print_tree(lexeme_t *tree, int level){
             printf(";\n");
         }
         break;
-
+/*
         case UNARY:
         if(cdr(tree) && getLexemeType(cdr(tree)) == EXPR_LIST){
             printf(")");
         }
+        break;
+*/
+        case UNARY:
+        if(getLexemeType(getLexemeLeft(tree)) == EXPR)
+        printf(") ");
         break;
 
         case PRINT_STATE:
