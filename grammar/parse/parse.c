@@ -184,7 +184,7 @@ lexeme_t *program(lexeme_t *loc_env){
     if(!loc_env) loc_env = env;
     lexeme_t *l; lexeme_t *r; //left and right pointers for the parse tree
     if(funcdef_pending()){ //extend environment
-        loc_env = extend(newLexeme("FUNCTION"), newLexeme("JOIN"), loc_env);
+        //loc_env = extend(newLexeme("FUNCTION"), newLexeme("JOIN"), loc_env);
         l = funcdef(loc_env);
     }
     else if(vardef_pending()) l = vardef(loc_env); //no extend
@@ -221,15 +221,17 @@ lexeme_t *funcdef(lexeme_t *loc_env){
 */
 
     lexeme_t *l, *r1, *r2; //lexemes requried for the cons()
+    lexeme_t *new_env = extend(newLexeme(NULL), newLexeme(NULL), loc_env);
     match(DEFINE);
-    l = match(VARIABLE); 
-    setLexemeValue(getString(getTypeValue(getLexemeValue(l))), loc_env);
-    insert_array(env_arr, loc_env); //keep record of the function's environment
+    l = match(VARIABLE);
+    setLexemeValue(getString(getTypeValue(getLexemeValue(l))), new_env);
+    insert_array(env_arr, new_env); //keep record of the function's environment
     match(OPEN_PAREN);
-    if(parameterlist_pending()) r1 = parameterlist(loc_env);
+    if(parameterlist_pending()) r1 = parameterlist(new_env);
     else r1 = NULL;
     match(CLOSE_PAREN);
-    r2 = block(loc_env);
+    r2 = block(new_env);
+    insert(l, r2, loc_env); 
 
     return cons(DEFINE, l, cons(FUNCDEF, r1, r2));
 
@@ -345,7 +347,7 @@ lexeme_t *statement(lexeme_t *loc_env){
     }
     else if(vardef_pending()) l = vardef(loc_env);
     else if(funcdef_pending()){
-        loc_env = extend(newLexeme("FUNCTION"), newLexeme("JOIN"), loc_env);
+        //loc_env = extend(newLexeme("FUNCTION"), newLexeme("JOIN"), loc_env);
         l = funcdef(loc_env);
     }
     else if(ifstate_pending()) l = ifstate(loc_env);
