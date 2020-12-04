@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "str.h": "c",
-        "lexeme.h": "c"
-    }
-}
